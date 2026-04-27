@@ -42,9 +42,11 @@
     }
     #app {
       position: relative; z-index: 1; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; padding: 3rem 1.5rem;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 3rem 1.5rem;
     }
+
+    /* ── LANDING ── */
     .landing { text-align: center; max-width: 420px; }
     .landing .moon {
       display: block; font-size: 3.5rem; color: var(--gold);
@@ -54,10 +56,7 @@
       0%, 100% { opacity: 0.6; transform: scale(1); }
       50%       { opacity: 1;   transform: scale(1.06); }
     }
-    .landing h1 {
-      font-family: 'Cinzel', serif; font-size: 2.6rem;
-      font-weight: 400; color: var(--gold); letter-spacing: 0.12em;
-    }
+    .landing h1 { font-family: 'Cinzel', serif; font-size: 2.6rem; font-weight: 400; color: var(--gold); letter-spacing: 0.12em; }
     .ornament { display: flex; align-items: center; gap: 1rem; margin: 1.5rem auto; width: fit-content; }
     .ornament-line { width: 60px; height: 1px; background: var(--gold-mid); }
     .ornament-dot  { font-size: 0.6rem; color: var(--gold); }
@@ -69,34 +68,126 @@
       transition: background 0.3s, color 0.3s;
     }
     .btn-connect:hover { background: var(--gold); color: var(--bg); }
+
+    /* ── LOADING ── */
     .loading { text-align: center; }
-    .loading .spinner {
-      display: block; font-size: 2.5rem; color: var(--gold);
-      margin-bottom: 1.5rem; animation: spin 5s linear infinite;
-    }
+    .loading .spinner { display: block; font-size: 2.5rem; color: var(--gold); margin-bottom: 1.5rem; animation: spin 5s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .loading p { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); }
+
+    /* ── READING ── */
     .reading { max-width: 860px; width: 100%; }
     .reading-header { text-align: center; margin-bottom: 3rem; }
     .reading-header h2 { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 400; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.5rem; }
     .reading-header p { font-style: italic; color: var(--text-dim); font-size: 1.05rem; }
-    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; margin-bottom: 1rem; }
-    @media (max-width: 600px) { .cards-grid { grid-template-columns: 1fr; max-width: 260px; margin: 0 auto 1rem; } }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 600px) {
+      .cards-grid { grid-template-columns: 1fr; max-width: 260px; margin: 0 auto 1rem; }
+    }
+
+    /* ── CARD FLIP STRUCTURE ── */
     .tarot-card {
-      background: var(--card-bg); border: 1px solid var(--gold-mid);
-      padding: 1.75rem 1.25rem 1.5rem; position: relative;
-      opacity: 0; transform: translateY(24px);
+      aspect-ratio: 500 / 860;
+      position: relative;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(24px);
+      transform-style: preserve-3d; /* allows child 3D transforms to work */
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
     .tarot-card.revealed { opacity: 1; transform: translateY(0); }
-    .tarot-card::before { content: ''; position: absolute; inset: 6px; border: 1px solid var(--gold-dim); pointer-events: none; }
-    .tarot-card::after { content: '✦'; position: absolute; bottom: 12px; right: 12px; font-size: 0.5rem; color: var(--gold-dim); }
-    .card-position { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); text-align: center; margin-bottom: 1.25rem; }
-    .card-numeral { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.25em; color: var(--gold-dim); text-align: center; margin-bottom: 0.4rem; }
-    .card-symbol { display: block; font-size: 2.2rem; text-align: center; color: var(--gold); margin: 0.4rem 0; }
-    .card-name { font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600; color: var(--gold); text-align: center; letter-spacing: 0.05em; margin-bottom: 1.25rem; }
-    .card-rule { width: 36px; height: 1px; background: var(--gold-mid); margin: 0 auto 1.25rem; }
-    .card-reading { font-size: 0.95rem; line-height: 1.85; color: var(--text); font-style: italic; text-align: center; }
+
+    .card-inner {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-inner.flipped { transform: rotateY(180deg); }
+
+    /* both faces share base styles */
+    .card-front, .card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* front face — reading text */
+    .card-front {
+      background: var(--card-bg);
+      border: 1px solid var(--gold-mid);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.4rem 1.1rem 1.2rem;
+      overflow-y: auto;
+    }
+    .card-front::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--gold-dim);
+      pointer-events: none;
+    }
+    .card-front::after {
+      content: '✦';
+      position: absolute;
+      bottom: 10px; right: 10px;
+      font-size: 0.5rem;
+      color: var(--gold-dim);
+    }
+
+    /* back face — illustration */
+    .card-back {
+      transform: rotateY(180deg);
+      background: #000;
+      border: 1px solid var(--gold-mid);
+      overflow: hidden;
+    }
+    .card-back img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* placeholder shown when image hasn't been added yet */
+    .card-back-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.75rem;
+      color: var(--gold-dim);
+    }
+    .card-back-placeholder span { font-size: 2rem; }
+    .card-back-placeholder p { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; }
+
+    /* card content elements */
+    .card-position { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); text-align: center; margin-bottom: 0.9rem; }
+    .card-numeral { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.25em; color: var(--gold-dim); text-align: center; margin-bottom: 0.3rem; }
+    .card-symbol { display: block; font-size: 2rem; text-align: center; color: var(--gold); margin: 0.3rem 0; }
+    .card-name { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600; color: var(--gold); text-align: center; letter-spacing: 0.05em; margin-bottom: 0.9rem; }
+    .card-rule { width: 32px; height: 1px; background: var(--gold-mid); margin: 0 auto 0.9rem; }
+    .card-reading { font-size: 0.85rem; line-height: 1.75; color: var(--text); font-style: italic; text-align: center; }
+
+    /* flip hint */
+    .flip-hint {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    /* error */
     .error-state { text-align: center; }
     .error-state p { color: #b07070; font-style: italic; font-size: 1.1rem; margin-bottom: 1.5rem; }
     .restart-btn {
@@ -115,34 +206,33 @@ const CLIENT_ID    = 'bc450906c5684edc9b0904ae3e221273';
 const REDIRECT_URI = 'https://xinruli.com/musictarot/';
 
 // ─── ALL 22 MAJOR ARCANA ─────────────────────────────────
+// file: the number used in the image filename (e.g. file:0 → "0.jpg")
 const ARCANA = {
-  'The Fool':           { num: 'O',     sym: '◌' },
-  'The Magician':       { num: 'I',     sym: '⌖' },
-  'The High Priestess': { num: 'II',    sym: '☽' },
-  'The Empress':        { num: 'III',   sym: '✦' },
-  'The Emperor':        { num: 'IV',    sym: '◈' },
-  'The Hierophant':     { num: 'V',     sym: '⊕' },
-  'The Lovers':         { num: 'VI',    sym: '⌘' },
-  'The Chariot':        { num: 'VII',   sym: '◬' },
-  'Strength':           { num: 'VIII',  sym: '∞' },
-  'The Hermit':         { num: 'IX',    sym: '◉' },
-  'Wheel of Fortune':   { num: 'X',     sym: '⊛' },
-  'Justice':            { num: 'XI',    sym: '⌬' },
-  'The Hanged Man':     { num: 'XII',   sym: '⊗' },
-  'Death':              { num: 'XIII',  sym: '⊘' },
-  'Temperance':         { num: 'XIV',   sym: '◇' },
-  'The Devil':          { num: 'XV',    sym: '⋈' },
-  'The Tower':          { num: 'XVI',   sym: '⚡' },
-  'The Star':           { num: 'XVII',  sym: '✧' },
-  'The Moon':           { num: 'XVIII', sym: '☾' },
-  'The Sun':            { num: 'XIX',   sym: '☀' },
-  'Judgement':          { num: 'XX',    sym: '◎' },
-  'The World':          { num: 'XXI',   sym: '⊙' },
+  'The Fool':           { num: 'O',     sym: '◌', file: 0  },
+  'The Magician':       { num: 'I',     sym: '⌖', file: 1  },
+  'The High Priestess': { num: 'II',    sym: '☽', file: 2  },
+  'The Empress':        { num: 'III',   sym: '✦', file: 3  },
+  'The Emperor':        { num: 'IV',    sym: '◈', file: 4  },
+  'The Hierophant':     { num: 'V',     sym: '⊕', file: 5  },
+  'The Lovers':         { num: 'VI',    sym: '⌘', file: 6  },
+  'The Chariot':        { num: 'VII',   sym: '◬', file: 7  },
+  'Strength':           { num: 'VIII',  sym: '∞', file: 8  },
+  'The Hermit':         { num: 'IX',    sym: '◉', file: 9  },
+  'Wheel of Fortune':   { num: 'X',     sym: '⊛', file: 10 },
+  'Justice':            { num: 'XI',    sym: '⌬', file: 11 },
+  'The Hanged Man':     { num: 'XII',   sym: '⊗', file: 12 },
+  'Death':              { num: 'XIII',  sym: '⊘', file: 13 },
+  'Temperance':         { num: 'XIV',   sym: '◇', file: 14 },
+  'The Devil':          { num: 'XV',    sym: '⋈', file: 15 },
+  'The Tower':          { num: 'XVI',   sym: '⚡', file: 16 },
+  'The Star':           { num: 'XVII',  sym: '✧', file: 17 },
+  'The Moon':           { num: 'XVIII', sym: '☾', file: 18 },
+  'The Sun':            { num: 'XIX',   sym: '☀', file: 19 },
+  'Judgement':          { num: 'XX',    sym: '◎', file: 20 },
+  'The World':          { num: 'XXI',   sym: '⊙', file: 21 },
 };
 
 // ─── GENRE RULES ─────────────────────────────────────────
-// Strength, Wheel of Fortune, and Death are narrative cards — no genre rules.
-// All others are matched by keyword against Spotify genre tags.
 const GENRE_RULES = [
   { card: 'The Fool',           keywords: ['hyperpop','pc music','digicore','glitchcore','bubblegum bass','avant-pop','deconstructed club','noise pop','experimental pop'] },
   { card: 'The Magician',       keywords: ['hip hop','rap','trap','drill','boom bap','east coast hip hop','west coast hip hop','southern hip hop','g funk','gangster rap'] },
@@ -181,15 +271,9 @@ function topCard(scores) {
 }
 
 // ─── READINGS ────────────────────────────────────────────
-// Each card has past/present/future functions receiving the full narrative object n.
-// n = { longArtist1, longArtist2, shortArtist1, shortArtist2, departedName, arrivedName,
-//        stability, pastCard, presentCard, futureCard, newGenres }
-
-const a2str = n => n.longArtist2 ? ` and ${n.longArtist2}` : '';
-const sa2str = n => n.shortArtist2 ? ` and ${n.shortArtist2}` : '';
+const a2str  = n => n.longArtist2  ? ` and ${n.longArtist2}`  : '';
 
 const READINGS = {
-
   'The Fool': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always had a chaotic streak. The Fool doesn't pick a lane. More accurately: The Fool doesn't believe lanes exist.`,
     present: n => n.arrivedName && n.departedName
@@ -197,15 +281,13 @@ const READINGS = {
       : `${n.shortArtist1} is in your current rotation, and The Fool approves. Right now you're reaching for something nobody has fully named yet.`,
     future:  n => `Your taste is becoming less explainable, not more. The Fool says: correct. Something chaotic and entirely your own is still forming.`,
   },
-
   'The Magician': {
-    past:    n => `${n.longArtist1}${a2str(n)} — music where language is the primary instrument, where the lyric lands like something you needed to hear said plainly. The Magician rules words as power. Your history confirms: you've always been drawn to artists who use them precisely.`,
+    past:    n => `${n.longArtist1}${a2str(n)} — music where language is the primary instrument, where the lyric lands like something you needed to hear said plainly. The Magician rules words as power. Your history confirms it.`,
     present: n => n.arrivedName && n.departedName
       ? `${n.departedName} receded; ${n.arrivedName} arrived with something specific to say. The Magician doesn't stay where the conversation has gone quiet.`
       : `${n.shortArtist1} keeps playing. The Magician is the card of will and articulation — right now you're drawn to music that says exactly what it means.`,
     future:  n => `Your taste is moving toward the direct and intentional. What's coming requires precision. Your ears are already practicing.`,
   },
-
   'The High Priestess': {
     past:    n => `${n.longArtist1}${a2str(n)} — music that lives below language, felt before it is understood. This has been your home for years. The High Priestess does not explain herself, and neither have you.`,
     present: n => n.arrivedName && n.departedName
@@ -213,7 +295,6 @@ const READINGS = {
       : `${n.shortArtist1} keeps playing, and you don't need to explain it to anyone. You are processing something you haven't named yet.`,
     future:  n => `The direction is inward. What's coming is quieter, more interior, less concerned with being understood. The High Priestess does not perform — she knows. Your taste is moving the same way.`,
   },
-
   'The Empress': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste gravitates toward the lush, the theatrical, the deliberately grand. The Empress doesn't do restraint. Neither have you.`,
     present: n => n.arrivedName && n.departedName
@@ -221,7 +302,6 @@ const READINGS = {
       : `${n.shortArtist1} is where you are right now — maximalist, sensory, larger than life. The Empress rules abundance. Your current listening is in full bloom.`,
     future:  n => `More grandeur, more sensation — that's the direction. The Empress does not arrive subtly. Neither will what's coming.`,
   },
-
   'The Emperor': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always had architecture to it. Grand structures, deliberate power, music that occupies a room before anyone speaks. The Emperor builds to last.`,
     present: n => n.arrivedName && n.departedName
@@ -229,7 +309,6 @@ const READINGS = {
       : `${n.shortArtist1} is where you are — music of scale and authority. The Emperor doesn't ask for attention. He occupies space until attention arrives on its own.`,
     future:  n => `Something large is forming. The Emperor suggests the next chapter has weight to it — music that means something beyond the moment it's played.`,
   },
-
   'The Hierophant': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has a devotional quality. Music as ritual, as practice, as something returned to again and again for more than pleasure. The Hierophant keeps the tradition.`,
     present: n => n.arrivedName && n.departedName
@@ -237,7 +316,6 @@ const READINGS = {
       : `${n.shortArtist1} keeps playing — music you return to like a practice. The Hierophant governs music that feels like it belongs to something larger than a single listen.`,
     future:  n => `The Hierophant suggests continuity. What's coming is not reinvention — it's deepening. You are moving further into something, not away from it.`,
   },
-
   'The Lovers': {
     past:    n => `${n.longArtist1}${a2str(n)} — music that makes you feel understood, that sounds like it was made for you specifically. The Lovers is not just romance. It is resonance. You've always known the difference.`,
     present: n => n.arrivedName && n.departedName
@@ -245,7 +323,6 @@ const READINGS = {
       : `${n.shortArtist1} keeps coming up. Your current listening is warm, intimate, emotionally available. The Lovers suggests a season of resonance — music that meets you exactly where you are.`,
     future:  n => `More warmth, more openness — that's where this is going. The Lovers asks you to stop armoring and start receiving. Your playlist is already there.`,
   },
-
   'The Chariot': {
     past:    n => `${n.longArtist1}${a2str(n)} at full speed — your history reads like someone who has always moved with intention. The Chariot is not impulsive. It is disciplined momentum. You don't drift.`,
     present: n => n.arrivedName && n.departedName
@@ -253,13 +330,11 @@ const READINGS = {
       : `${n.shortArtist1} is doing what The Chariot demands: forward motion, no hesitation. You know what you want and you're not slowing down to second-guess it.`,
     future:  n => `The momentum is building. The Chariot doesn't promise easy — it promises direction. What's coming requires commitment. Your recent listening has already decided.`,
   },
-
   'Strength': {
-    past:    n => `${n.longArtist1}${a2str(n)} — the same artists, returning across years. Strength is not loudness. It is endurance. Your history reflects someone who knows who they are and doesn't apologize for it.`,
+    past:    n => `${n.longArtist1}${a2str(n)} — the same artists, returning across years. Strength is not loudness. It is endurance. Your history reflects someone who knows who they are.`,
     present: n => `${n.shortArtist1} still plays because it still works. Strength says some people pivot; you deepen. That's not stagnation — that's rootedness.`,
     future:  n => `Your past and present are closely aligned — the same instincts, the same pull. You are not in a season of reinvention. You are in a season of showing up, consistently, as exactly who you already are. The cards don't always predict change. Sometimes they confirm arrival.`,
   },
-
   'The Hermit': {
     past:    n => `${n.longArtist1}${a2str(n)} and the patience to listen all the way through — that's the thread in your history. The Hermit is not lonely. The Hermit is deliberate.`,
     present: n => n.arrivedName && n.departedName
@@ -267,35 +342,30 @@ const READINGS = {
       : `${n.shortArtist1} plays and you don't need company. The Hermit carries a lantern not to show others the way, but to see their own path clearly. That's what you're doing.`,
     future:  n => `Your listening is getting quieter, more stripped back. The Hermit suggests a season of intentional focus ahead — the particular clarity that comes from choosing less noise.`,
   },
-
   'Wheel of Fortune': {
     past:    n => `${n.longArtist1}${a2str(n)} and a dozen other things that share nothing obvious — your all-time taste refuses to be categorized. The Wheel rules eclecticism. You have always trusted your own orbit over anyone else's.`,
     present: n => `Your recent listening is varied, restless, reaching in several directions at once. The Wheel is mid-turn. Right now you are between fixed points. That's exactly right.`,
     future:  n => `The Wheel keeps turning. Your taste is diversifying in ways that don't resolve into a single direction yet. Something unexpected is coming, and your ears are already preparing without telling your brain.`,
   },
-
   'Justice': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always had a moral dimension. Music that names things, that refuses to look away. The Lovers resonates; Justice insists.`,
     present: n => n.arrivedName && n.departedName
       ? `${n.departedName} has faded; ${n.arrivedName} has arrived with something to say. Justice doesn't stay where the conversation has gone quiet.`
-      : `${n.shortArtist1} keeps playing. Justice is the card of truth-telling — right now you're drawn to music that says the thing plainly. That's not comfort listening. That's conviction.`,
+      : `${n.shortArtist1} keeps playing. Justice is the card of truth-telling — right now you're drawn to music that says the thing plainly. That's conviction, not comfort.`,
     future:  n => `The direction is toward music that means something beyond the sound. Justice suggests conviction — in what you listen to, and probably other things too.`,
   },
-
   'The Hanged Man': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always included music that suspends time rather than marks it. The Hanged Man governs deliberate stillness. You have always known how to wait inside a sound.`,
     present: n => n.arrivedName && n.departedName
       ? `${n.departedName} gave way to ${n.arrivedName} — even quieter, even more suspended. The Hanged Man descends further.`
-      : `${n.shortArtist1} plays and time does something different. The Hanged Man is not passive — suspension is an active choice. Right now you are choosing stillness. That is harder than it looks.`,
+      : `${n.shortArtist1} plays and time does something different. Suspension is an active choice. Right now you are choosing stillness. That is harder than it looks.`,
     future:  n => `The direction is more suspension, less event. The Hanged Man says: what you're looking for cannot be found by moving faster.`,
   },
-
   'Death': {
-    past:    n => `${n.longArtist1} and that entire world built up over years of listening.`,
-    present: n => `${n.shortArtist1} is here now, where ${n.longArtist1} used to be — and the overlap between them is almost nothing. Death in tarot is never an ending. It is the most complete transformation available. The cards do not often see a shift this total. Something fundamental changed. The music knows it even if you don't yet.`,
+    past:    n => `${n.longArtist1} and that entire world — built up across years of listening.`,
+    present: n => `${n.shortArtist1} is here now, where ${n.longArtist1} used to be, and the overlap between them is almost nothing. Death in tarot is never an ending. It is the most complete transformation available. The cards do not often see a shift this total. Something fundamental changed. The music knows it even if you don't yet.`,
     future:  n => `What's coming is not a refinement of what came before — it is a continuation of the transformation already underway. Death does not reverse. It moves through.`,
   },
-
   'Temperance': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste blends rather than polarizes. Not maximally dark, not maximally bright, never fully one thing. Temperance is the art of balance, practiced without needing to name it.`,
     present: n => n.arrivedName && n.departedName
@@ -303,15 +373,13 @@ const READINGS = {
       : `${n.shortArtist1} is where you are — music that synthesizes rather than declares. Temperance is the middle path, chosen not from indecision but from wisdom.`,
     future:  n => `The direction is toward integration. Temperance suggests the next chapter involves bringing things together rather than choosing between them.`,
   },
-
   'The Devil': {
     past:    n => `${n.longArtist1}${a2str(n)} — strange, relentless, a little dangerous. Your all-time taste goes places most people won't follow. The Devil rules obsession. You are loyal to your vices in exactly the right way.`,
     present: n => n.arrivedName && n.departedName
       ? `${n.arrivedName} showed up recently and you haven't been able to stop. ${n.departedName} couldn't hold you the same way anymore. The Devil names the new obsession.`
-      : `${n.shortArtist1} is on heavy rotation and you know it. The Devil just names what's happening: attached in a way that goes beyond taste. That's devotion.`,
+      : `${n.shortArtist1} is on heavy rotation and you know it. Attached in a way that goes beyond taste. That's not a problem. That's devotion.`,
     future:  n => `Something magnetic is forming — a sound, a phase, an obsession still taking shape. You won't be able to explain it to anyone. That's fine.`,
   },
-
   'The Tower': {
     past:    n => `${n.longArtist1}${a2str(n)} — uncompromising, high voltage, built to shake something loose. The Tower does not play in the background. It announces itself. So have you.`,
     present: n => n.arrivedName && n.departedName
@@ -319,15 +387,13 @@ const READINGS = {
       : `${n.shortArtist1} is where you are right now — intensity without apology, energy without explanation. The Tower is not comfortable music. It is honest music.`,
     future:  n => `Something is accelerating. The Tower falls not as punishment but as permission — to stop holding together what was never meant to last.`,
   },
-
   'The Star': {
     past:    n => `${n.longArtist1}${a2str(n)} — quiet and luminous, music that makes the future feel possible without rushing you toward it. The Star has been a constant for a long time.`,
     present: n => n.arrivedName && n.departedName
       ? `${n.departedName} is gone from the foreground; ${n.arrivedName} has taken its place — something more open, more reaching. The Star rises after a clearing. You may be in it.`
-      : `${n.shortArtist1} keeps appearing in your recent plays — open, reaching, a little hopeful. The Star rises after something has cleared. You may be in that clearing right now.`,
+      : `${n.shortArtist1} keeps appearing — open, reaching, a little hopeful. The Star rises after something has cleared. You may be in that clearing right now.`,
     future:  n => `Something is gentling. The Star promises not triumph but renewal — the kind that comes quietly, after something has cleared, and stays longer than you expect.`,
   },
-
   'The Moon': {
     past:    n => `${n.longArtist1}${a2str(n)} — music that understands the 2am version of you. The Moon rules things felt before they are named. You have always lived in that territory.`,
     present: n => n.arrivedName && n.departedName
@@ -335,7 +401,6 @@ const READINGS = {
       : `${n.shortArtist1} keeps surfacing — weighted, introspective, a little unresolved. The Moon doesn't offer answers. It illuminates just enough to keep walking.`,
     future:  n => `Something is getting quieter, more interior. The Moon says: this is not regression. This is depth. What looks like sadness from the outside is often just honesty from within.`,
   },
-
   'The Sun': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste leans bright, energetic, unguarded. The Sun doesn't apologize for warmth. Neither have you. Joy has always been a first language.`,
     present: n => n.arrivedName && n.departedName
@@ -343,7 +408,6 @@ const READINGS = {
       : `${n.shortArtist1} is your current obsession, and The Sun says: correct. High energy, high warmth, no ambivalence. This is a true north revealing itself.`,
     future:  n => `More warmth is coming. The Sun does not demand you earn it — it just rises. Your listening suggests you are finally letting it. What's ahead is lighter than what came before.`,
   },
-
   'Judgement': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always reached for the anthemic, the collective, music made for more than one person in a room. Judgement is the card of reckoning and awakening. Your history has always pointed there.`,
     present: n => n.arrivedName && n.departedName
@@ -351,7 +415,6 @@ const READINGS = {
       : `${n.shortArtist1} keeps playing — big, reaching, built for collective release. Judgement is not subtle. Right now you want the music that opens something up.`,
     future:  n => `Something loud and clarifying is coming. Judgement suggests a reckoning — not destructive but illuminating. The kind of music that makes you feel part of something. You're heading toward it.`,
   },
-
   'The World': {
     past:    n => `${n.longArtist1}${a2str(n)} on full volume, body in motion — this has always been you at your best. The World is presence and completion. Your all-time taste confirms you know how to inhabit a moment.`,
     present: n => n.arrivedName && n.departedName
@@ -359,7 +422,6 @@ const READINGS = {
       : `${n.shortArtist1} is in your current rotation and The World says you are exactly where you should be. Rare. Don't overthink it.`,
     future:  n => `More arrival, less preparing. The World says the next chapter is one where you stop rehearsing and start inhabiting. Your recent listening is already there. The rest of you is catching up.`,
   },
-
 };
 
 // ─── NARRATIVE ───────────────────────────────────────────
@@ -397,28 +459,15 @@ function buildNarrative({ longArtists, shortArtists }) {
   const pastCard    = topCard(longScores);
   const presentCard = topCard(shortScores);
 
-  // Future card: three possible paths
-  // 1. Almost no artist overlap → Death (complete transformation)
-  // 2. Heavy overlap → Strength (staying the course)
-  // 3. New genres appeared → card driven by those new genres
-  // 4. Taste shifted but not completely → follow present card
-  // 5. Catch-all → Wheel of Fortune
   let futureCard;
-  if (stability < 0.2 && arrived.length >= 3) {
-    futureCard = 'Death';
-  } else if (stability > 0.7) {
-    futureCard = 'Strength';
-  } else if (newGenres.length > 3) {
-    futureCard = topCard(scoreGenres(newGenres)) || 'Wheel of Fortune';
-  } else if (presentCard !== pastCard) {
-    futureCard = presentCard;
-  } else {
-    futureCard = 'Wheel of Fortune';
-  }
+  if (stability < 0.2 && arrived.length >= 3)   futureCard = 'Death';
+  else if (stability > 0.7)                      futureCard = 'Strength';
+  else if (newGenres.length > 3)                 futureCard = topCard(scoreGenres(newGenres)) || 'Wheel of Fortune';
+  else if (presentCard !== pastCard)             futureCard = presentCard;
+  else                                           futureCard = 'Wheel of Fortune';
 
   return {
     pastCard, presentCard, futureCard,
-    stability, newGenres,
     longArtist1:  longItems[0]?.name  || 'your longtime artists',
     longArtist2:  longItems[1]?.name  || null,
     shortArtist1: shortItems[0]?.name || longItems[0]?.name || 'your recent artists',
@@ -476,6 +525,13 @@ async function fetchMusicData(token) {
   return { longArtists, shortArtists };
 }
 
+// ─── FLIP ────────────────────────────────────────────────
+function flipCard(el) {
+  // Don't flip during the initial reveal animation
+  if (!el.classList.contains('revealed')) return;
+  el.querySelector('.card-inner').classList.toggle('flipped');
+}
+
 // ─── RENDER ──────────────────────────────────────────────
 const app = document.getElementById('app');
 
@@ -508,15 +564,26 @@ function renderReading(n) {
   ];
 
   const cardsHtml = cards.map((card, i) => {
-    const arc = ARCANA[card.card] || { num: '?', sym: '✦' };
+    const arc = ARCANA[card.card] || { num: '?', sym: '✦', file: null };
+
+    // Back face: show image if file number exists, otherwise placeholder
+    const backHtml = arc.file !== null
+      ? `<img src="${arc.file}.jpg" alt="${card.card}" />`
+      : `<div class="card-back-placeholder"><span>${arc.sym}</span><p>illustration coming soon</p></div>`;
+
     return `
-      <div class="tarot-card" id="card-${i}">
-        <div class="card-position">${card.position}</div>
-        <div class="card-numeral">${arc.num}</div>
-        <span class="card-symbol">${arc.sym}</span>
-        <div class="card-name">${card.card}</div>
-        <div class="card-rule"></div>
-        <p class="card-reading">${card.reading}</p>
+      <div class="tarot-card" id="card-${i}" onclick="flipCard(this)">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="card-position">${card.position}</div>
+            <div class="card-numeral">${arc.num}</div>
+            <span class="card-symbol">${arc.sym}</span>
+            <div class="card-name">${card.card}</div>
+            <div class="card-rule"></div>
+            <p class="card-reading">${card.reading}</p>
+          </div>
+          <div class="card-back">${backHtml}</div>
+        </div>
       </div>`;
   }).join('');
 
@@ -527,6 +594,7 @@ function renderReading(n) {
         <p>Three cards drawn from the archive of your soul</p>
       </div>
       <div class="cards-grid">${cardsHtml}</div>
+      <p class="flip-hint">✦ &nbsp; click any card to reveal its illustration &nbsp; ✦</p>
     </div>`;
 
   cards.forEach((_, i) => {
