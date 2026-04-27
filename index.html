@@ -171,7 +171,7 @@
 <body>
 <div id="app"></div>
 <script>
-const CLIENT_ID   = 'bc450906c5684edc9b0904ae3e221273';
+const CLIENT_ID    = 'bc450906c5684edc9b0904ae3e221273';
 const REDIRECT_URI = 'https://xinruli.com/musictarot/';
 
 // ─── ARCANA ──────────────────────────────────────────────
@@ -191,44 +191,55 @@ const ARCANA = {
   'Strength':           { num: 'VIII',  sym: '∞' },
 };
 
-// ─── CARD SELECTION ──────────────────────────────────────
-// f = { valence, energy, danceability, acousticness, instrumentalness, speechiness, tempo }
+// ─── GENRE → CARD RULES ──────────────────────────────────
+// Each rule: keywords to match against the joined genre string, card to assign, priority weight
+const GENRE_RULES = [
+  { card: 'The High Priestess', weight: 2, keywords: ['classical','instrumental','ambient','piano','orchestra','new age','meditation','post-classical','neoclassical'] },
+  { card: 'The Tower',          weight: 2, keywords: ['metal','hardcore','noise','grindcore','death','thrash','black metal','industrial','heavy'] },
+  { card: 'The Moon',           weight: 2, keywords: ['emo','screamo','slowcore','shoegaze','dreamy','dark','doom','goth','sadcore','depressive'] },
+  { card: 'The Hermit',         weight: 2, keywords: ['folk','acoustic','singer-songwriter','americana','bluegrass','country','appalachian'] },
+  { card: 'The Magician',       weight: 2, keywords: ['hip hop','rap','trap','spoken word','r&b','soul','afrobeats','reggaeton','latin'] },
+  { card: 'The Chariot',        weight: 2, keywords: ['drum and bass','jungle','techno','speedcore','punk','post-punk','garage','fast'] },
+  { card: 'The Devil',          weight: 2, keywords: ['dark pop','witch house','haunted','occult','stoner','psych','experimental'] },
+  { card: 'The Lovers',         weight: 2, keywords: ['jazz','blues','bossa nova','soul','neo soul','smooth','romantic','love'] },
+  { card: 'The World',          weight: 2, keywords: ['dance','edm','house','disco','funk','afro house','tropical','club','party'] },
+  { card: 'The Sun',            weight: 2, keywords: ['pop','bubblegum','k-pop','j-pop','happy','bright','sunshine','feel good','fun'] },
+  { card: 'The Star',           weight: 2, keywords: ['indie','dream pop','chillwave','lo-fi','bedroom','alternative','art pop'] },
+  { card: 'The Chariot',        weight: 1, keywords: ['electronic','synth','electro','hyperpop','jersey club'] },
+];
 
-function pickCard(f) {
-  if (f.instrumentalness > 0.40)                  return 'The High Priestess';
-  if (f.energy > 0.72 && f.valence < 0.38)        return 'The Tower';
-  if (f.energy > 0.70 && f.valence > 0.62)        return 'The Sun';
-  if (f.energy < 0.38 && f.valence < 0.42)        return 'The Moon';
-  if (f.acousticness > 0.55 && f.energy < 0.52)   return 'The Hermit';
-  if (f.danceability > 0.72 && f.valence > 0.58)  return 'The World';
-  if (f.speechiness > 0.12)                       return 'The Magician';
-  if (f.tempo > 142 && f.energy > 0.62)           return 'The Chariot';
-  if (f.valence > 0.60 && f.acousticness > 0.38)  return 'The Star';
-  if (f.energy > 0.58 && f.valence < 0.42)        return 'The Devil';
-  if (f.valence > 0.58 && f.danceability > 0.60)  return 'The Lovers';
-  return 'Wheel of Fortune';
+function pickCardFromGenres(genres) {
+  const joined = genres.join(' ').toLowerCase();
+  if (!joined.trim()) return 'Wheel of Fortune';
+
+  const scores = {};
+  for (const rule of GENRE_RULES) {
+    const hits = rule.keywords.filter(kw => joined.includes(kw)).length;
+    if (hits > 0) {
+      scores[rule.card] = (scores[rule.card] || 0) + hits * rule.weight;
+    }
+  }
+
+  const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  return ranked.length > 0 ? ranked[0][0] : 'Wheel of Fortune';
 }
 
-function pickFutureCard(longF, shortF) {
-  const dValence  = shortF.valence - longF.valence;
-  const dEnergy   = shortF.energy  - longF.energy;
-  const dAcoustic = shortF.acousticness - longF.acousticness;
-  const dDance    = shortF.danceability - longF.danceability;
+function pickFutureCard(longGenres, shortGenres) {
+  // Find genres that are NEW in short-term (not in long-term top genres)
+  const longSet = new Set(longGenres.map(g => g.toLowerCase()));
+  const newGenres = shortGenres.filter(g => !longSet.has(g.toLowerCase()));
 
-  const biggest = Math.max(Math.abs(dValence), Math.abs(dEnergy), Math.abs(dAcoustic), Math.abs(dDance));
-  if (biggest < 0.07) return 'Strength';
+  // If there are meaningful new genres, base the future on those
+  if (newGenres.length > 2) return pickCardFromGenres(newGenres);
 
-  if (Math.abs(dValence)  === biggest) return dValence  > 0 ? 'The Sun'    : 'The Moon';
-  if (Math.abs(dEnergy)   === biggest) return dEnergy   > 0 ? 'The Tower'  : 'The Star';
-  if (Math.abs(dAcoustic) === biggest) return dAcoustic > 0 ? 'The Hermit' : 'The Magician';
-  if (Math.abs(dDance)    === biggest) return dDance    > 0 ? 'The World'  : 'The Lovers';
-  return 'Wheel of Fortune';
+  // If taste is stable, check if short and long picked the same card
+  const longCard  = pickCardFromGenres(longGenres);
+  const shortCard = pickCardFromGenres(shortGenres);
+  if (longCard === shortCard) return 'Strength'; // staying true to yourself
+  return shortCard; // evolving toward present taste
 }
 
 // ─── READINGS ────────────────────────────────────────────
-// c = { a1: topArtist, a2: secondArtist, t1: topTrack }
-// position = 'past' | 'present' | 'future'
-
 const READINGS = {
   'The High Priestess': {
     past:    c => `${c.a1} has been your long companion — music that exists beyond words, felt before it is understood. The High Priestess rules the inner life. Your listening history belongs to her.`,
@@ -241,7 +252,7 @@ const READINGS = {
     future:  c => `Something is accelerating. The Tower falls not as punishment but as permission — to stop holding together what was never meant to last. Your listening already knows this.`,
   },
   'The Sun': {
-    past:    c => `"${c.t1}" has been in rotation, and the data doesn't lie: you are someone who, at their core, has always chosen joy. The Sun does not apologize for brightness. Neither have you.`,
+    past:    c => `${c.a1} has been in heavy rotation, and the data doesn't lie: you are someone who, at their core, has always chosen joy. The Sun does not apologize for brightness. Neither have you.`,
     present: c => `${c.a1} is your current obsession, and The Sun says: correct. High energy, high happiness, no ambivalence. This is not a phase. This is a true north revealing itself.`,
     future:  c => `More warmth is coming. The Sun does not demand you earn it — it just rises. Your listening suggests you are finally letting it. What's ahead is lighter than what came before.`,
   },
@@ -253,59 +264,49 @@ const READINGS = {
   'The Hermit': {
     past:    c => `${c.a1} and quiet mornings and music that demands your full attention — that's the thread running through your history. The Hermit is not lonely. The Hermit is deliberate.`,
     present: c => `Right now you are pulling inward. ${c.a1} plays and you don't need company. The Hermit carries a lantern not to show others the way, but to see their own path clearly.`,
-    future:  c => `Your listening is getting quieter, more acoustic, more stripped back. The Hermit suggests a season of intentional focus ahead — not isolation, but the particular clarity that comes from choosing less noise.`,
+    future:  c => `Your listening is getting quieter, more stripped back. The Hermit suggests a season of intentional focus ahead — not isolation, but the particular clarity that comes from choosing less noise.`,
   },
   'The World': {
     past:    c => `${c.a1} on full volume, body in motion, no ambivalence — this has always been you at your best. The World is completion and presence. Your listening history confirms: you know how to inhabit a moment.`,
     present: c => `You've been listening to ${c.a1} and probably moving. The World is the highest card — it means you are exactly where you should be right now. Rare. Don't overthink it.`,
-    future:  c => `More danceability, more joy, more arrival — that's the direction. The World says the next chapter is one where you stop preparing and start inhabiting. It's closer than it looks.`,
+    future:  c => `More joy, more arrival — that's the direction. The World says the next chapter is one where you stop preparing and start inhabiting. It's closer than it looks.`,
   },
   'The Magician': {
     past:    c => `${c.a1} has been a constant — music with something to say, words that land like an argument you hadn't considered. The Magician rules language as power. You've always been drawn to artists who wield it precisely.`,
-    present: c => `"${c.t1}" keeps playing. The Magician is the card of will and articulation. You are in a period of clarity right now, even if it doesn't feel like it yet. Your playlist knows before you do.`,
-    future:  c => `Your taste is trending toward the direct, the electric, the intentional. The Magician points forward: what's coming requires you to say exactly what you mean. Your ears are already practicing.`,
+    present: c => `${c.a1} keeps playing. The Magician is the card of will and articulation. You are in a period of clarity right now, even if it doesn't feel like it yet. Your playlist knows before you do.`,
+    future:  c => `Your taste is trending toward the direct and intentional. The Magician points forward: what's coming requires you to say exactly what you mean. Your ears are already practicing.`,
   },
   'The Chariot': {
-    past:    c => `Fast, relentless, ${c.a1} at high tempo — your listening history reads like someone who has always moved with intention. The Chariot is not impulsive. It is disciplined speed.`,
-    present: c => `"${c.t1}" is doing exactly what The Chariot demands: forward motion, no hesitation. Your current listening suggests you know what you want and you're not slowing down to second-guess it.`,
-    future:  c => `The momentum in your recent plays is building. The Chariot doesn't promise easy — it promises direction. What's coming requires you to commit and keep moving.`,
+    past:    c => `Fast, relentless, ${c.a1} at full speed — your listening history reads like someone who has always moved with intention. The Chariot is not impulsive. It is disciplined momentum.`,
+    present: c => `${c.a1} is doing exactly what The Chariot demands: forward motion, no hesitation. Your current listening suggests you know what you want and you're not slowing down to second-guess it.`,
+    future:  c => `The momentum in your recent listening is building. The Chariot doesn't promise easy — it promises direction. What's coming requires you to commit and keep moving.`,
   },
   'The Star': {
     past:    c => `${c.a1}, quiet and luminous, has been your constant. The Star is hope without urgency — music that makes the future feel possible without rushing you toward it.`,
-    present: c => `Your recent listening is calm, open, reaching toward something. ${c.a1} keeps appearing. The Star follows The Tower — it rises after something has cleared. You may be in that clearing right now.`,
-    future:  c => `Something is gentling. The energy in your listening is settling into something warmer and more patient. The Star promises not triumph but renewal — the kind that comes quietly, and stays.`,
+    present: c => `Your recent listening is open, reaching toward something. ${c.a1} keeps appearing. The Star rises after something has cleared. You may be in that clearing right now.`,
+    future:  c => `Something is gentling in your taste. The Star promises not triumph but renewal — the kind that comes quietly, and stays.`,
   },
   'The Devil': {
-    past:    c => `${c.a1} — heavy, relentless, a little dangerous — has been your long-term companion. The Devil rules obsession. You are loyal to your vices in exactly the right way.`,
-    present: c => `"${c.t1}" is on repeat and you know it. The Devil doesn't judge — it just names what's happening: you are attached to this sound in a way that goes beyond taste. That's not a problem. That's devotion.`,
-    future:  c => `The intensity is rising. Something magnetic is pulling you forward — a sound, a phase, an obsession still forming. You won't be able to explain it to anyone. That's fine.`,
+    past:    c => `${c.a1} — strange, relentless, a little dangerous — has been your long-term companion. The Devil rules obsession. You are loyal to your vices in exactly the right way.`,
+    present: c => `${c.a1} is on repeat and you know it. The Devil doesn't judge — it just names what's happening: you are attached to this sound in a way that goes beyond taste. That's devotion.`,
+    future:  c => `Something magnetic is pulling you forward — a sound, a phase, an obsession still forming. You won't be able to explain it to anyone. That's fine.`,
   },
   'The Lovers': {
     past:    c => `${c.a1} has been the throughline — music that makes you feel understood, that sounds like it was made for you specifically. The Lovers is not just romance. It's resonance. You've always known the difference.`,
-    present: c => `Your current listening is warm, melodic, emotionally open. ${c.a1} keeps coming up. The Lovers suggests a season of connection — to people, to feeling, to the parts of yourself that don't need explaining.`,
+    present: c => `Your current listening is warm, melodic, emotionally open. ${c.a1} keeps coming up. The Lovers suggests a season of connection — to feeling, to the parts of yourself that don't need explaining.`,
     future:  c => `More warmth, more openness — that's where this is going. The Lovers asks you to stop armoring and start receiving. Your playlist is already there. The rest of you is catching up.`,
   },
   'Wheel of Fortune': {
     past:    c => `${c.a1} and a dozen other things that have nothing in common — your all-time taste defies categorization. The Wheel of Fortune rules eclecticism and cycles. You've always trusted your own orbit.`,
-    present: c => `Your recent listening is varied, restless, reaching in several directions at once. The Wheel turns. Right now you are mid-rotation — not lost, just between fixed points. That's exactly right.`,
-    future:  c => `The Wheel suggests the next chapter is unpredictable, even to you. Your taste is diversifying. Something unexpected is coming, and your ears are already preparing without telling your brain.`,
+    present: c => `Your recent listening is varied, restless, reaching in several directions. The Wheel turns. Right now you are mid-rotation — not lost, just between fixed points. That's exactly right.`,
+    future:  c => `The Wheel suggests the next chapter is unpredictable, even to you. Something unexpected is coming, and your ears are already preparing without telling your brain.`,
   },
   'Strength': {
-    past:    c => `${c.a1} has been a constant because you are a constant. Strength is not loudness — it is endurance. Your listening history reflects someone who knows who they are and doesn't apologize for it.`,
-    present: c => `You haven't changed much lately, and that's the reading. Strength says some people pivot; you deepen. ${c.a1} still plays because it still works. That's not stagnation — that's rootedness.`,
-    future:  c => `Your past and present listening are closely aligned. Strength says this is correct. You are not in a season of reinvention. You're in a season of showing up, consistently, as exactly who you already are.`,
+    past:    c => `${c.a1} has been a constant because you are a constant. Strength is not loudness — it is endurance. Your listening history reflects someone who knows who they are.`,
+    present: c => `You haven't changed much lately, and that's the reading. Strength says some people pivot; you deepen. ${c.a1} still plays because it still works. That's rootedness, not stagnation.`,
+    future:  c => `Your past and present listening are closely aligned. You are not in a season of reinvention. You're in a season of showing up, consistently, as exactly who you already are.`,
   },
 };
-
-// ─── HELPERS ─────────────────────────────────────────────
-function avgFeatures(list) {
-  const valid = list.filter(f => f && f.valence != null);
-  if (!valid.length) return null;
-  const keys = ['valence','energy','danceability','acousticness','instrumentalness','speechiness','tempo'];
-  const avg = {};
-  for (const k of keys) avg[k] = valid.reduce((s, f) => s + f[k], 0) / valid.length;
-  return avg;
-}
 
 // ─── PKCE ────────────────────────────────────────────────
 function randomString(len) {
@@ -313,13 +314,11 @@ function randomString(len) {
   return Array.from(crypto.getRandomValues(new Uint8Array(len)))
     .map(b => chars[b % chars.length]).join('');
 }
-
 async function makeChallenge(verifier) {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
   return btoa(String.fromCharCode(...new Uint8Array(digest)))
     .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
 }
-
 async function login() {
   const verifier  = randomString(64);
   const challenge = await makeChallenge(verifier);
@@ -329,7 +328,6 @@ async function login() {
     scope: 'user-top-read', code_challenge_method: 'S256', code_challenge: challenge,
   });
 }
-
 async function exchangeToken(code) {
   const res = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
@@ -352,72 +350,68 @@ async function spotifyGet(path, token) {
 }
 
 async function fetchMusicData(token) {
-  const [longTracks, shortTracks, longArtists, shortArtists] = await Promise.all([
-    spotifyGet('/me/top/tracks?limit=20&time_range=long_term',  token),
-    spotifyGet('/me/top/tracks?limit=20&time_range=short_term', token),
-    spotifyGet('/me/top/artists?limit=5&time_range=long_term',  token),
-    spotifyGet('/me/top/artists?limit=5&time_range=short_term', token),
+  const [longArtists, shortArtists] = await Promise.all([
+    spotifyGet('/me/top/artists?limit=20&time_range=long_term',  token),
+    spotifyGet('/me/top/artists?limit=20&time_range=short_term', token),
   ]);
-
-  // Batch-fetch audio features for both sets of tracks
-  const longIds  = longTracks.items?.map(t => t.id).join(',')  || '';
-  const shortIds = shortTracks.items?.map(t => t.id).join(',') || '';
-
-  const [longFeatures, shortFeatures] = await Promise.all([
-    longIds  ? spotifyGet('/audio-features?ids=' + longIds,  token) : { audio_features: [] },
-    shortIds ? spotifyGet('/audio-features?ids=' + shortIds, token) : { audio_features: [] },
-  ]);
-
-  return {
-    longTracks, shortTracks, longArtists, shortArtists,
-    longFeatures:  longFeatures.audio_features  || [],
-    shortFeatures: shortFeatures.audio_features || [],
-  };
+  return { longArtists, shortArtists };
 }
 
 // ─── BUILD READING ───────────────────────────────────────
-function buildReading(data) {
-  const { longTracks, shortTracks, longArtists, shortArtists, longFeatures, shortFeatures } = data;
+function buildReading({ longArtists, shortArtists }) {
+  const longItems  = longArtists.items  || [];
+  const shortItems = shortArtists.items || [];
 
-  const longAvg  = avgFeatures(longFeatures);
-  const shortAvg = avgFeatures(shortFeatures);
+  if (!longItems.length && !shortItems.length) {
+    throw new Error('No artist data returned from Spotify. Make sure you have some listening history and try again.');
+  }
 
-  if (!longAvg || !shortAvg) throw new Error('Not enough listening history yet — try again after using Spotify more.');
+  // Collect genres weighted by artist rank (top artists count more)
+  function getGenres(items) {
+    const genres = [];
+    items.forEach((artist, i) => {
+      const weight = Math.max(1, items.length - i); // top artist gets highest weight
+      for (let w = 0; w < weight; w++) genres.push(...(artist.genres || []));
+    });
+    return genres;
+  }
 
-  const pastCard    = pickCard(longAvg);
-  const presentCard = pickCard(shortAvg);
-  const futureCard  = pickFutureCard(longAvg, shortAvg);
+  const longGenres  = getGenres(longItems);
+  const shortGenres = getGenres(shortItems);
 
-  const longContext = {
-    a1: longArtists.items?.[0]?.name  || longTracks.items?.[0]?.artists?.[0]?.name || 'your artists',
-    a2: longArtists.items?.[1]?.name  || 'others',
-    t1: longTracks.items?.[0]?.name   || 'your songs',
+  const pastCard    = pickCardFromGenres(longGenres);
+  const presentCard = pickCardFromGenres(shortGenres.length ? shortGenres : longGenres);
+  const futureCard  = pickFutureCard(longGenres, shortGenres.length ? shortGenres : longGenres);
+
+  const longCtx = {
+    a1: longItems[0]?.name  || 'your artists',
+    a2: longItems[1]?.name  || 'others',
+    t1: longItems[0]?.name  || 'your music',
   };
-  const shortContext = {
-    a1: shortArtists.items?.[0]?.name || shortTracks.items?.[0]?.artists?.[0]?.name || 'your recent artists',
-    a2: shortArtists.items?.[1]?.name || 'others',
-    t1: shortTracks.items?.[0]?.name  || 'your recent songs',
+  const shortCtx = {
+    a1: shortItems[0]?.name || longItems[0]?.name || 'your recent artists',
+    a2: shortItems[1]?.name || longItems[1]?.name || 'others',
+    t1: shortItems[0]?.name || longItems[0]?.name || 'your music',
   };
-  const futureContext = shortContext; // future leans toward where they're going
 
   return [
     {
       position: 'The Past',
       card:     pastCard,
-      reading:  READINGS[pastCard].past(longContext),
-      artists:  longArtists.items?.slice(0,3).map(a => a.name).join(' · ') || '',
+      reading:  READINGS[pastCard].past(longCtx),
+      artists:  longItems.slice(0, 3).map(a => a.name).join(' · '),
     },
     {
       position: 'The Present',
       card:     presentCard,
-      reading:  READINGS[presentCard].present(shortContext),
-      artists:  shortArtists.items?.slice(0,3).map(a => a.name).join(' · ') || '',
+      reading:  READINGS[presentCard].present(shortCtx),
+      artists:  shortItems.slice(0, 3).map(a => a.name).join(' · '),
     },
     {
       position: 'The Future',
       card:     futureCard,
-      reading:  READINGS[futureCard].future(futureContext),
-      artists:  shortTracks.items?.slice(0,3).map(t => t.name).join(' · ') || '',
+      reading:  READINGS[futureCard].future(shortCtx),
+      artists:  shortItems.slice(0, 3).map(a => a.name).join(' · '),
     },
   ];
 }
@@ -499,7 +493,7 @@ async function init() {
     renderLoading();
     try {
       const tokenData = await exchangeToken(code);
-      if (!tokenData.access_token) throw new Error('Spotify did not return a token. Check that your redirect URI in the Spotify dashboard matches exactly: ' + REDIRECT_URI);
+      if (!tokenData.access_token) throw new Error('Spotify did not return a token — double-check the redirect URI in your Spotify dashboard matches exactly: ' + REDIRECT_URI);
       const musicData = await fetchMusicData(tokenData.access_token);
       const cards     = buildReading(musicData);
       renderReading(cards);
