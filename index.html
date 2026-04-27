@@ -7,20 +7,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --gold: #c9a84c;
-      --gold-dim: rgba(201, 168, 76, 0.25);
-      --gold-mid: rgba(201, 168, 76, 0.5);
-      --bg: #07070f;
-      --card-bg: #0c0c1a;
-      --text: #e8e0d0;
-      --text-dim: rgba(232, 224, 208, 0.45);
+      --gold: #c9a84c; --gold-dim: rgba(201,168,76,0.25); --gold-mid: rgba(201,168,76,0.5);
+      --bg: #07070f; --card-bg: #0c0c1a; --text: #e8e0d0; --text-dim: rgba(232,224,208,0.45);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg); color: var(--text);
-      font-family: 'Crimson Text', Georgia, serif;
-      min-height: 100vh; overflow-x: hidden;
-    }
+    body { background: var(--bg); color: var(--text); font-family: 'Crimson Text', Georgia, serif; min-height: 100vh; overflow-x: hidden; }
     body::before {
       content: ''; position: fixed; inset: 0;
       background-image:
@@ -40,162 +31,50 @@
         radial-gradient(1px 1px at 55% 95%, rgba(255,255,255,0.4) 0%, transparent 100%);
       pointer-events: none; z-index: 0;
     }
-    #app {
-      position: relative; z-index: 1; min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; padding: 3rem 1.5rem;
-    }
-
-    /* ── LANDING ── */
+    #app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 1.5rem; }
     .landing { text-align: center; max-width: 420px; }
-    .landing .moon {
-      display: block; font-size: 3.5rem; color: var(--gold);
-      margin-bottom: 1.75rem; animation: breathe 4s ease-in-out infinite;
-    }
-    @keyframes breathe {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50%       { opacity: 1;   transform: scale(1.06); }
-    }
+    .landing .moon { display: block; font-size: 3.5rem; color: var(--gold); margin-bottom: 1.75rem; animation: breathe 4s ease-in-out infinite; }
+    @keyframes breathe { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
     .landing h1 { font-family: 'Cinzel', serif; font-size: 2.6rem; font-weight: 400; color: var(--gold); letter-spacing: 0.12em; }
     .ornament { display: flex; align-items: center; gap: 1rem; margin: 1.5rem auto; width: fit-content; }
     .ornament-line { width: 60px; height: 1px; background: var(--gold-mid); }
-    .ornament-dot  { font-size: 0.6rem; color: var(--gold); }
+    .ornament-dot { font-size: 0.6rem; color: var(--gold); }
     .landing p { font-size: 1.2rem; font-style: italic; color: var(--text-dim); line-height: 1.8; margin-bottom: 2.5rem; }
-    .btn-connect {
-      background: transparent; color: var(--gold); border: 1px solid var(--gold);
-      padding: 0.9rem 2.2rem; font-family: 'Cinzel', serif; font-size: 0.8rem;
-      letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-    }
+    .btn-connect { background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 0.9rem 2.2rem; font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.3s, color 0.3s; }
     .btn-connect:hover { background: var(--gold); color: var(--bg); }
-
-    /* ── LOADING ── */
     .loading { text-align: center; }
     .loading .spinner { display: block; font-size: 2.5rem; color: var(--gold); margin-bottom: 1.5rem; animation: spin 5s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .loading p { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); }
-
-    /* ── READING ── */
     .reading { max-width: 860px; width: 100%; }
     .reading-header { text-align: center; margin-bottom: 3rem; }
     .reading-header h2 { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 400; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.5rem; }
     .reading-header p { font-style: italic; color: var(--text-dim); font-size: 1.05rem; }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.75rem;
-      margin-bottom: 1rem;
-    }
-    @media (max-width: 600px) {
-      .cards-grid { grid-template-columns: 1fr; max-width: 260px; margin: 0 auto 1rem; }
-    }
-
-    /* ── CARD FLIP STRUCTURE ── */
-    .tarot-card {
-      aspect-ratio: 500 / 860;
-      position: relative;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(24px);
-      transform-style: preserve-3d; /* allows child 3D transforms to work */
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; margin-bottom: 1rem; }
+    @media (max-width: 600px) { .cards-grid { grid-template-columns: 1fr; max-width: 260px; margin: 0 auto 1rem; } }
+    .tarot-card { aspect-ratio: 500 / 860; position: relative; cursor: pointer; opacity: 0; transform: translateY(24px); transform-style: preserve-3d; transition: opacity 0.7s ease, transform 0.7s ease; }
     .tarot-card.revealed { opacity: 1; transform: translateY(0); }
-
-    .card-inner {
-      position: absolute;
-      inset: 0;
-      transform-style: preserve-3d;
-      transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    .card-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1); }
     .card-inner.flipped { transform: rotateY(180deg); }
-
-    /* both faces share base styles */
-    .card-front, .card-back {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-
-    /* front face — reading text */
-    .card-front {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-mid);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.4rem 1.1rem 1.2rem;
-      overflow-y: auto;
-    }
-    .card-front::before {
-      content: '';
-      position: absolute;
-      inset: 6px;
-      border: 1px solid var(--gold-dim);
-      pointer-events: none;
-    }
-    .card-front::after {
-      content: '✦';
-      position: absolute;
-      bottom: 10px; right: 10px;
-      font-size: 0.5rem;
-      color: var(--gold-dim);
-    }
-
-    /* back face — illustration */
-    .card-back {
-      transform: rotateY(180deg);
-      background: #000;
-      border: 1px solid var(--gold-mid);
-      overflow: hidden;
-    }
-    .card-back img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    /* placeholder shown when image hasn't been added yet */
-    .card-back-placeholder {
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 0.75rem;
-      color: var(--gold-dim);
-    }
+    .card-front, .card-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .card-front { background: var(--card-bg); border: 1px solid var(--gold-mid); display: flex; flex-direction: column; align-items: center; padding: 1.4rem 1.1rem 1.2rem; overflow-y: auto; }
+    .card-front::before { content: ''; position: absolute; inset: 6px; border: 1px solid var(--gold-dim); pointer-events: none; }
+    .card-front::after { content: '✦'; position: absolute; bottom: 10px; right: 10px; font-size: 0.5rem; color: var(--gold-dim); }
+    .card-back { transform: rotateY(180deg); background: #000; border: 1px solid var(--gold-mid); overflow: hidden; }
+    .card-back img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-back-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem; color: var(--gold-dim); }
     .card-back-placeholder span { font-size: 2rem; }
     .card-back-placeholder p { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; }
-
-    /* card content elements */
     .card-position { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); text-align: center; margin-bottom: 0.9rem; }
     .card-numeral { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.25em; color: var(--gold-dim); text-align: center; margin-bottom: 0.3rem; }
     .card-symbol { display: block; font-size: 2rem; text-align: center; color: var(--gold); margin: 0.3rem 0; }
     .card-name { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600; color: var(--gold); text-align: center; letter-spacing: 0.05em; margin-bottom: 0.9rem; }
     .card-rule { width: 32px; height: 1px; background: var(--gold-mid); margin: 0 auto 0.9rem; }
     .card-reading { font-size: 0.85rem; line-height: 1.75; color: var(--text); font-style: italic; text-align: center; }
-
-    /* flip hint */
-    .flip-hint {
-      text-align: center;
-      margin-top: 1.25rem;
-      font-family: 'Cinzel', serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      animation: breathe 4s ease-in-out infinite;
-    }
-
-    /* error */
+    .flip-hint { text-align: center; margin-top: 1.25rem; font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); animation: breathe 4s ease-in-out infinite; }
     .error-state { text-align: center; }
     .error-state p { color: #b07070; font-style: italic; font-size: 1.1rem; margin-bottom: 1.5rem; }
-    .restart-btn {
-      display: block; margin: 0 auto; background: transparent; color: var(--text-dim);
-      border: 1px solid rgba(232,224,208,0.15); padding: 0.6rem 1.75rem;
-      font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.25em;
-      text-transform: uppercase; cursor: pointer; transition: all 0.3s;
-    }
+    .restart-btn { display: block; margin: 0 auto; background: transparent; color: var(--text-dim); border: 1px solid rgba(232,224,208,0.15); padding: 0.6rem 1.75rem; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
     .restart-btn:hover { color: var(--text); border-color: rgba(232,224,208,0.4); }
   </style>
 </head>
@@ -205,8 +84,7 @@
 const CLIENT_ID    = 'bc450906c5684edc9b0904ae3e221273';
 const REDIRECT_URI = 'https://xinruli.com/musictarot/';
 
-// ─── ALL 22 MAJOR ARCANA ─────────────────────────────────
-// file: the number used in the image filename (e.g. file:0 → "0.jpg")
+// ─── ARCANA ──────────────────────────────────────────────
 const ARCANA = {
   'The Fool':           { num: 'O',     sym: '◌', file: 0  },
   'The Magician':       { num: 'I',     sym: '⌖', file: 1  },
@@ -232,36 +110,470 @@ const ARCANA = {
   'The World':          { num: 'XXI',   sym: '⊙', file: 21 },
 };
 
-// ─── GENRE RULES ─────────────────────────────────────────
-const GENRE_RULES = [
-  { card: 'The Fool',           keywords: ['hyperpop','pc music','digicore','glitchcore','bubblegum bass','avant-pop','deconstructed club','noise pop','experimental pop'] },
-  { card: 'The Magician',       keywords: ['hip hop','rap','trap','drill','boom bap','east coast hip hop','west coast hip hop','southern hip hop','g funk','gangster rap'] },
-  { card: 'The High Priestess', keywords: ['ambient','neoclassical','new age','meditation','post-classical','contemporary classical','modern classical','minimalism','piano'] },
-  { card: 'The Empress',        keywords: ['baroque pop','orchestral pop','chamber pop','symphonic','art pop','theatrical','glam','cinematic','operatic'] },
-  { card: 'The Emperor',        keywords: ['classic rock','hard rock','stadium rock','progressive rock','arena rock','album rock','proto-metal','opera','symphonic rock'] },
-  { card: 'The Hierophant',     keywords: ['gospel','spiritual','sacred','choral','devotional','christian','worship','hymn','soul gospel'] },
-  { card: 'The Lovers',         keywords: ['jazz','bossa nova','jazz pop','vocal jazz','swing','bebop','jazz fusion','quiet storm','smooth jazz','jazz vocals'] },
-  { card: 'The Chariot',        keywords: ['drum and bass','jungle','techno','punk','post-punk','garage rock','breakbeat','speedcore','footwork'] },
-  { card: 'The Hermit',         keywords: ['folk','acoustic','singer-songwriter','americana','bluegrass','country folk','appalachian','chamber folk','anti-folk','indie folk'] },
-  { card: 'Justice',            keywords: ['conscious','protest','political','afrobeat','reggae','ska','activist','revolutionary','folk protest'] },
-  { card: 'The Hanged Man',     keywords: ['drone','dark ambient','musique concrete','lowercase','field recording','isolationism','tape music','microsound'] },
-  { card: 'Temperance',         keywords: ['r&b','neo soul','soul','alternative r&b','indie r&b','funk soul','motown','quiet storm'] },
-  { card: 'The Devil',          keywords: ['witch house','dark pop','occult','stoner rock','psychedelic rock','psychedelic pop','krautrock','gothic rock','darkwave','industrial'] },
-  { card: 'The Tower',          keywords: ['metal','hardcore','grindcore','death metal','thrash metal','black metal','mathcore','powerviolence','heavy metal','noise rock'] },
-  { card: 'The Star',           keywords: ['indie pop','lo-fi','bedroom pop','chillwave','dream pop','jangle pop','twee','college rock','alternative pop'] },
-  { card: 'The Moon',           keywords: ['emo','screamo','slowcore','shoegaze','goth','doom','sadcore','melancholia','emo pop','midwest emo','post-rock'] },
-  { card: 'The Sun',            keywords: ['pop','dance pop','electropop','k-pop','j-pop','bubblegum pop','teen pop','power pop','synth pop'] },
-  { card: 'Judgement',          keywords: ['anthemic','orchestral indie','post-metal','epic','progressive indie','art rock','chamber indie','cinematic indie'] },
-  { card: 'The World',          keywords: ['house','edm','disco','funk','afro house','tropical house','nu disco','dance','electronic dance','club'] },
+// ─── WORKAROUND 1: NAME PATTERN MATCHING ─────────────────
+// Catches unlisted artists whose names contain revealing keywords.
+// Runs before the lookup table as a preliminary pass.
+const NAME_PATTERNS = [
+  // Classical ensembles / orchestras / choirs
+  { pattern: /orchestra|philharmonic|symphony|sinfonia|ensemble|quartet|quintet|trio\b|concerto/i, card: 'The High Priestess' },
+  { pattern: /\bchoir\b|chorale|choral|cantata|chamber choir/i,                                    card: 'The Hierophant' },
+  { pattern: /opera|operatic|\bopera\b/i,                                                           card: 'The Empress' },
+  // DJ / producer names
+  { pattern: /\bDJ\s/i,                                                                             card: 'The World' },
+  { pattern: /\bMC\s/i,                                                                             card: 'The Magician' },
+  // Genre words embedded in artist names
+  { pattern: /\bjazz\b/i,                                                                           card: 'The Lovers' },
+  { pattern: /\bgospel\b|\bworship\b/i,                                                             card: 'The Hierophant' },
+  { pattern: /\bfolk\b/i,                                                                           card: 'The Hermit' },
+  { pattern: /\brap\b|\bhip.?hop\b/i,                                                               card: 'The Magician' },
+  { pattern: /\bmetal\b|\bhardcore\b/i,                                                             card: 'The Tower' },
+  { pattern: /\bblues\b/i,                                                                          card: 'The Lovers' },
 ];
 
-function scoreGenres(genres) {
-  const joined = genres.join(' ').toLowerCase();
-  const scores = {};
-  for (const rule of GENRE_RULES) {
-    const hits = rule.keywords.filter(kw => joined.includes(kw)).length;
-    if (hits > 0) scores[rule.card] = (scores[rule.card] || 0) + hits;
+function cardFromName(artistName) {
+  for (const { pattern, card } of NAME_PATTERNS) {
+    if (pattern.test(artistName)) return card;
   }
+  return null;
+}
+
+// ─── WORKAROUND 2: ARTIST LOOKUP TABLE (~400 artists) ────
+// Keyed by lowercase artist name.
+const ARTIST_CARDS = {
+  // ── The Sun ── joyful, bright, unguarded pop
+  'taylor swift':'The Sun','sabrina carpenter':'The Sun','dua lipa':'The Sun',
+  'harry styles':'The Sun','bruno mars':'The Sun','katy perry':'The Sun',
+  'ariana grande':'The Sun','lizzo':'The Sun','carly rae jepsen':'The Sun',
+  'abba':'The Sun','kylie minogue':'The Sun','mariah carey':'The Sun',
+  'olivia rodrigo':'The Sun','ed sheeran':'The Sun','shawn mendes':'The Sun',
+  'one direction':'The Sun','selena gomez':'The Sun','bts':'The Sun',
+  'blackpink':'The Sun','twice':'The Sun','newjeans':'The Sun',
+  'aespa':'The Sun','ive':'The Sun','le sserafim':'The Sun','stray kids':'The Sun',
+  'exo':'The Sun','shinee':'The Sun','nct 127':'The Sun','got7':'The Sun',
+  'charlie puth':'The Sun','justin bieber':'The Sun','angèle':'The Sun',
+  'angele':'The Sun','zara larsson':'The Sun','anne-marie':'The Sun',
+  'meghan trainor':'The Sun','jason mraz':'The Sun','colbie caillat':'The Sun',
+  'elle king':'The Sun','pink':'The Sun','kelly clarkson':'The Sun',
+  'jessie j':'The Sun','ava max':'The Sun','bebe rexha':'The Sun',
+  'jax jones':'The Sun','Jonas brothers':'The Sun','jonas brothers':'The Sun',
+  '5 seconds of summer':'The Sun','5sos':'The Sun','little mix':'The Sun',
+  'clean bandit':'The Sun','joel corry':'The Sun','mika':'The Sun',
+  'celine dion':'The Sun','whitney houston':'The Sun','diana ross':'The Sun',
+  'michael bublé':'The Sun','michael buble':'The Sun',
+
+  // ── The World ── dance, presence, collective body
+  'beyoncé':'The World','beyonce':'The World','michael jackson':'The World',
+  'daft punk':'The World','disclosure':'The World','robyn':'The World',
+  'janet jackson':'The World','madonna':'The World','lcd soundsystem':'The World',
+  'prince':'The World','james brown':'The World','chic':'The World',
+  'donna summer':'The World','george michael':'The World','bee gees':'The World',
+  'calvin harris':'The World','david guetta':'The World','tiësto':'The World',
+  'tiesto':'The World','martin garrix':'The World','swedish house mafia':'The World',
+  'skrillex':'The World','diplo':'The World','kaytranada':'The World',
+  'fred again..':'The World','fred again':'The World','justin timberlake':'The World',
+  'stevie wonder':'The World','earth wind & fire':'The World',
+  'earth, wind & fire':'The World','nile rodgers':'The World',
+  'mark ronson':'The World','pharrell williams':'The World','pharrell':'The World',
+  'nicki minaj':'The World','lizzo':'The World','megan thee stallion':'The World',
+  'sam smith':'The World','years & years':'The World','olly murs':'The World',
+  'charli xcx':'The Fool','the chemical brothers':'The Chariot',
+  'deadmau5':'The World','avicii':'The World','marshmello':'The World',
+  'the weeknd':'The Moon','partynextdoor':'The Moon',
+  'majid jordan':'The Moon','dvsn':'Temperance',
+
+  // ── The Moon ── introspective, 2am, melancholic
+  'billie eilish':'The Moon','lorde':'The Moon','conan gray':'The Moon',
+  'the national':'The Moon','radiohead':'The Moon','elliott smith':'The Moon',
+  'mitski':'The Moon','joji':'The Moon','rex orange county':'The Moon',
+  'tove lo':'The Moon','beach house':'The Moon','cigarettes after sex':'The Moon',
+  'novo amor':'The Moon','james blake':'The Moon',
+  'bright eyes':'The Moon','alex g':'The Moon','perfume genius':'The Moon',
+  'fka twigs':'The Moon','burial':'The Moon','joy division':'The Moon',
+  'the xx':'The Moon','mazzy star':'The Moon','portishead':'The Moon',
+  'massive attack':'The Moon','tricky':'The Moon','the microphones':'The Moon',
+  'mount eerie':'The Moon','sun kil moon':'The Moon','bill callahan':'The Moon',
+  'grouper':'The Moon','julien baker':'The Moon','phoebe bridgers':'The Moon',
+  'boygenius':'The Moon','lucy dacus':'The Moon','sad alex':'The Moon',
+  'clairo':'The Moon','rini':'The Moon','bülow':'The Moon','bulo':'The Moon',
+  'maisie peters':'The Moon','lany':'The Moon','gracie abrams':'The Moon',
+  'rolle':'The Moon','laufey':'The Lovers',
+  'the weeknd':'The Moon','banks':'The Moon','lykke li':'The Moon',
+  'feist':'The Empress','lana del rey':'The Empress',
+  'bat for lashes':'The Empress','polly scattergood':'The Moon',
+  'imogen heap':'The Empress','youth lagoon':'The Moon',
+  'wild nothing':'The Star','real estate':'The Star',
+  'snail mail':'The Star','girl in red':'The Star',
+
+  // ── The Star ── indie, quiet hope, reaching outward
+  'japanese breakfast':'The Star','soccer mommy':'The Star',
+  'big thief':'The Star','angel olsen':'The Star',
+  'mac demarco':'The Star','men i trust':'The Star',
+  'hozier':'The Star','cavetown':'The Star','tame impala':'The Star',
+  'arctic monkeys':'The Star','the 1975':'The Star','vampire weekend':'The Star',
+  'mgmt':'The Star','two door cinema club':'The Star','alt-j':'The Star',
+  'foster the people':'The Star','glass animals':'The Star','wallows':'The Star',
+  'dayglow':'The Star','coin':'The Star','still woozy':'The Star',
+  'half alive':'The Star','half•alive':'The Star',
+  'beabadoobee':'The Star','adrianne lenker':'The Star',
+  'weyes blood':'The Star','haim':'The Star','the head and the heart':'The Star',
+  'lord huron':'The Star','fleet foxes':'The Hermit',
+  'bon iver':'The Moon','sufjan stevens':'The Hermit',
+  'iron & wine':'The Hermit','death cab for cutie':'The Moon',
+  'postal service':'The Star','modest mouse':'The Star',
+  'the shins':'The Star','pavement':'The Star','built to spill':'The Star',
+  'yo la tengo':'The Star','wilco':'The Star','grandaddy':'The Star',
+  'neutral milk hotel':'The Star','of montreal':'The Fool',
+  'joanna newsom':'The Empress','joanna gruesome':'The Star',
+  'julia jacklin':'The Star','courtney barnett':'The Star',
+  'stella donnelly':'The Star','julia jacklin':'The Star',
+  'waxahatchee':'The Hermit','palehound':'The Star',
+  'mitski':'The Moon','japanese breakfast':'The Star',
+  'illuminati hotties':'The Fool','the regrettes':'The Chariot',
+  'sports team':'The Chariot','squid':'The Chariot',
+  'wet leg':'The Star','dry cleaning':'The Devil',
+  'black country, new road':'The Star','shame':'The Chariot',
+
+  // ── The Hermit ── folk, acoustic, deliberate
+  'noah kahan':'The Hermit','iron & wine':'The Hermit',
+  'the tallest man on earth':'The Hermit','john prine':'The Hermit',
+  'gillian welch':'The Hermit','james taylor':'The Hermit','cat stevens':'The Hermit',
+  'simon & garfunkel':'The Hermit','paul simon':'The Hermit',
+  'joni mitchell':'The Hermit','neil young':'The Hermit','sufjan stevens':'The Hermit',
+  'leonard cohen':'The Hermit','emmylou harris':'The Hermit','dolly parton':'The Hermit',
+  'colter wall':'The Hermit','tyler childers':'The Hermit','caamp':'The Hermit',
+  'gregory alan isakov':'The Hermit','the oh hellos':'The Hermit',
+  'the avett brothers':'The Hermit','the lumineers':'The Hermit',
+  'mumford & sons':'The Hermit','the decemberists':'The Hermit',
+  'brandi carlile':'The Hermit','willie nelson':'The Hermit',
+  'nick drake':'The Hermit','laura marling':'The Hermit',
+  'bob dylan':'The Hermit','tom petty':'The Hermit',
+  'alison krauss':'The Hermit','nanci griffith':'The Hermit',
+  'zaz':'The Hermit','pomme':'The Hermit','carole king':'The Hermit',
+  'james taylor':'The Hermit','john denver':'The Hermit',
+  'woody guthrie':'Justice','pete seeger':'Justice',
+  'townes van zandt':'The Hermit','guy clark':'The Hermit',
+  'steve earle':'The Hermit','drive-by truckers':'The Hermit',
+  'jason isbell':'The Hermit','the war on drugs':'Judgement',
+  'father john misty':'The Devil','josh ritter':'The Hermit',
+  'conor oberst':'The Moon','neko case':'The Hermit',
+  'ryan adams':'The Moon','damien rice':'The Moon',
+  'david gray':'The Hermit','ray lamontagne':'The Hermit',
+  'passenger':'The Hermit','frank turner':'The Hermit',
+  'ben howard':'The Hermit','bear\'s den':'The Hermit',
+
+  // ── The Empress ── theatrical, maximalist, lush
+  'chappell roan':'The Empress','florence + the machine':'The Empress',
+  'florence and the machine':'The Empress','björk':'The Empress','bjork':'The Empress',
+  'kate bush':'The Empress','fiona apple':'The Empress','joanna newsom':'The Empress',
+  'st. vincent':'The Empress','bat for lashes':'The Empress',
+  'marina':'The Empress','marina and the diamonds':'The Empress',
+  'sia':'The Empress','adele':'The Empress','amy winehouse':'The Empress',
+  'lady gaga':'The Empress','imogen heap':'The Empress','lana del rey':'The Empress',
+  'david bowie':'The Empress','fleetwood mac':'The Empress',
+  'peter gabriel':'The Empress','tchaikovsky':'The Empress',
+  'leonard bernstein':'The Empress','mahler':'The Empress',
+  'vitaa':'The Empress','ellie goulding':'The Empress',
+  'paloma faith':'The Empress','emeli sandé':'The Empress','emeli sande':'The Empress',
+  'imelda may':'The Empress','p!nk':'The Empress',
+  'tori amos':'The Empress','norah jones':'The Lovers',
+  'feist':'The Empress','ingrid michaelson':'The Star',
+  'regina spektor':'The Empress','sara bareilles':'The Empress',
+  'ani difranco':'Justice','dar williams':'The Hermit',
+  'sheryl crow':'The Sun','sarah mclachlan':'The Moon',
+  'alanis morissette':'The Tower','garbage':'The Devil',
+  'hole':'The Tower','pj harvey':'The Devil',
+  'björk':'The Empress','chan marshall':'The Moon',
+  'cat power':'The Moon','kim gordon':'The Tower',
+
+  // ── The Emperor ── classic rock, grand scale, architecture
+  'the beatles':'The Emperor','led zeppelin':'The Emperor','pink floyd':'The Emperor',
+  'the rolling stones':'The Emperor','the who':'The Emperor',
+  'bruce springsteen':'The Emperor','rush':'The Emperor','deep purple':'The Emperor',
+  'queen':'The Emperor','elton john':'The Emperor','the eagles':'The Emperor',
+  'journey':'The Emperor','boston':'The Emperor','yes':'The Emperor',
+  'genesis':'The Emperor','heart':'The Emperor',
+  'vivaldi':'The Emperor','mozart':'The Emperor','beethoven':'The Emperor',
+  'brahms':'The Emperor','wagner':'The Emperor','stravinsky':'The Emperor',
+  'handel':'The Emperor','haydn':'The Emperor','schubert':'The Emperor',
+  'schumann':'The Emperor','liszt':'The Emperor','dvorak':'The Emperor',
+  'sibelius':'The Emperor','grieg':'The Emperor','rachmaninoff':'The Emperor',
+  'jimi hendrix':'The Emperor','eric clapton':'The Emperor',
+  'cream':'The Emperor','the doors':'The Devil',
+  'creedence clearwater revival':'The Emperor','lynyrd skynyrd':'The Emperor',
+  'ac/dc':'The Emperor','aerosmith':'The Emperor','guns n\' roses':'The Emperor',
+  'guns and roses':'The Emperor','van halen':'The Emperor','def leppard':'The Emperor',
+  'bon jovi':'The Emperor','foreigner':'The Emperor','kansas':'The Emperor',
+  'styx':'The Emperor','toto':'The Emperor','chicago':'The Emperor',
+  'steely dan':'The Emperor','fleetwood mac':'The Empress',
+  'crosby stills nash & young':'The Hermit','csny':'The Hermit',
+
+  // ── The High Priestess ── ambient, interior, still
+  'max richter':'The High Priestess','brian eno':'The High Priestess',
+  'nils frahm':'The High Priestess','arvo pärt':'The High Priestess',
+  'arvo part':'The High Priestess','ólafur arnalds':'The High Priestess',
+  'olafur arnalds':'The High Priestess','stars of the lid':'The High Priestess',
+  'ryuichi sakamoto':'The High Priestess','tycho':'The High Priestess',
+  'boards of canada':'The High Priestess','jon hopkins':'The High Priestess',
+  'hammock':'The High Priestess','claude debussy':'The High Priestess',
+  'erik satie':'The High Priestess','frédéric chopin':'The High Priestess',
+  'frederic chopin':'The High Priestess','philip glass':'The High Priestess',
+  'steve reich':'The High Priestess','j.s. bach':'The High Priestess',
+  'bach':'The High Priestess','keith jarrett':'The High Priestess',
+  'four tet':'The High Priestess','los angeles philharmonic':'The High Priestess',
+  'berlin philharmonic':'The High Priestess','london symphony orchestra':'The High Priestess',
+  'new york philharmonic':'The High Priestess','boston symphony orchestra':'The High Priestess',
+  'gustavo dudamel':'The High Priestess','yanni':'The High Priestess',
+  'ambient 1':'The High Priestess','harold budd':'The High Priestess',
+  'peter broderick':'The High Priestess','hauschka':'The High Priestess',
+  'goldmund':'The High Priestess','jóhann jóhannsson':'The High Priestess',
+  'johann johannsson':'The High Priestess','ennio morricone':'The High Priestess',
+  'hans zimmer':'The High Priestess','john williams':'The High Priestess',
+  'howard shore':'The High Priestess','joe hisaishi':'The High Priestess',
+  'yiruma':'The High Priestess','ludovico einaudi':'The High Priestess',
+  'the piano guys':'The High Priestess',
+
+  // ── The Hanged Man ── drone, structurally inert
+  'william basinski':'The Hanged Man','tim hecker':'The Hanged Man',
+  'oneohtrix point never':'The Hanged Man','the caretaker':'The Hanged Man',
+  'john cage':'The Hanged Man','morton feldman':'The Hanged Man',
+  'éliane radigue':'The Hanged Man','eliane radigue':'The Hanged Man',
+  'loscil':'The Hanged Man','julianna barwick':'The Hanged Man',
+  'sunn o)))':'The Hanged Man','earth':'The Hanged Man',
+  'labradford':'The Hanged Man','windy & carl':'The Hanged Man',
+  'pan sonic':'The Hanged Man','merzbow':'The Tower',
+
+  // ── The Magician ── hip hop, rap, language as power
+  'kendrick lamar':'The Magician','jay-z':'The Magician','drake':'The Magician',
+  'tyler, the creator':'The Magician','tyler the creator':'The Magician',
+  'j. cole':'The Magician','j cole':'The Magician',
+  'cardi b':'The Magician','eminem':'The Magician','lil wayne':'The Magician',
+  'kanye west':'The Magician','ye':'The Magician','travis scott':'The Magician',
+  'future':'The Magician','lil baby':'The Magician','gunna':'The Magician',
+  'bad bunny':'The Magician','j balvin':'The Magician','daddy yankee':'The Magician',
+  'mf doom':'The Magician','a tribe called quest':'The Magician',
+  'nas':'The Magician','lauryn hill':'The Magician','missy elliott':'The Magician',
+  'andré 3000':'The Magician','chance the rapper':'The Magician',
+  'childish gambino':'The Magician','vince staples':'The Magician',
+  'brockhampton':'The Magician','post malone':'The Magician',
+  '21 savage':'The Magician','lil uzi vert':'The Magician',
+  'roddy ricch':'The Magician','polo g':'The Magician',
+  'jack harlow':'The Magician','j. cole':'The Magician',
+  'rick ross':'The Magician','meek mill':'The Magician',
+  'wiz khalifa':'The Magician','mac miller':'The Moon',
+  'logic':'The Magician','big sean':'The Magician','common':'Justice',
+  'mos def':'Justice','talib kweli':'Justice','dead prez':'Justice',
+  'immortal technique':'Justice','public enemy':'Justice',
+  'stromae':'The Magician','aya nakamura':'The Magician',
+  'angèle':'The Sun','angele':'The Sun','damso':'The Magician',
+  'bigflo & oli':'The Magician','bigflo and oli':'The Magician',
+  'orelsan':'The Magician','nekfeu':'The Magician',
+  'hamza':'The Magician','ninho':'The Magician',
+  'niska':'The Magician','lacrim':'The Magician',
+  'skepta':'The Magician','slowthai':'The Fool',
+  'ghetts':'The Magician','little simz':'The Magician',
+  'aitch':'The Magician','central cee':'The Magician',
+  'digga d':'The Magician','stormzy':'The Magician',
+  'dave':'The Magician','jorja smith':'Temperance',
+
+  // ── Temperance ── R&B, soul, synthesis
+  'sza':'Temperance','frank ocean':'Temperance','h.e.r.':'Temperance',
+  'jhené aiko':'Temperance','jhene aiko':'Temperance','daniel caesar':'Temperance',
+  'solange':'Temperance','khalid':'Temperance','summer walker':'Temperance',
+  'alicia keys':'Temperance','john legend':'Temperance',
+  'jessie ware':'Temperance','jorja smith':'Temperance',
+  'lianne la havas':'Temperance','blood orange':'Temperance',
+  'steve lacy':'Temperance','omar apollo':'Temperance',
+  'kehlani':'Temperance','sabrina claudio':'Temperance','brent faiyaz':'Temperance',
+  'giveon':'Temperance','ari lennox':'Temperance','alex isley':'Temperance',
+  'snoh aalegra':'Temperance','serpentwithfeet':'Temperance',
+  'amber mark':'Temperance','col3trane':'Temperance',
+  'joy crookes':'Temperance','mahalia':'Temperance',
+  'ella mai':'Temperance','raveena':'Temperance',
+  'sam cooke':'The Hierophant','otis redding':'The Lovers',
+  'al green':'The Lovers','bill withers':'The Lovers',
+  'marvin gaye':'The Lovers','ray charles':'The Lovers',
+  'aretha franklin':'The Hierophant','stevie wonder':'The World',
+
+  // ── The Lovers ── jazz, intimate resonance
+  'laufey':'The Lovers','sade':'The Lovers','diana krall':'The Lovers',
+  'chet baker':'The Lovers','miles davis':'The Lovers','john coltrane':'The Lovers',
+  'ella fitzgerald':'The Lovers','billie holiday':'The Lovers',
+  'frank sinatra':'The Lovers','nat king cole':'The Lovers',
+  'stan getz':'The Lovers','joão gilberto':'The Lovers','joao gilberto':'The Lovers',
+  'astrud gilberto':'The Lovers','antonio carlos jobim':'The Lovers',
+  'caetano veloso':'The Lovers','duke ellington':'The Lovers',
+  'louis armstrong':'The Lovers','herbie hancock':'The Lovers',
+  'd\'angelo':'The Lovers','erykah badu':'The Lovers','maxwell':'The Lovers',
+  'gregory porter':'The Lovers','esperanza spalding':'The Lovers',
+  'norah jones':'The Lovers','harry connick jr.':'The Lovers',
+  'jamie cullum':'The Lovers','michael bublé':'The Sun',
+  'corinne bailey rae':'The Lovers','katie melua':'The Lovers',
+  'bossa nova':'The Lovers','jose james':'The Lovers',
+  'thelonious monk':'The Lovers','charlie parker':'The Lovers',
+  'dave brubeck':'The Lovers','charles mingus':'The Lovers',
+  'bill evans':'The High Priestess','art tatum':'The Lovers',
+  'oscar peterson':'The Lovers','wynton marsalis':'The Lovers',
+  'kamasi washington':'The Lovers','thundercat':'The Lovers',
+
+  // ── The Fool ── genre-defying, chaotic
+  'charli xcx':'The Fool','100 gecs':'The Fool','rina sawayama':'The Fool',
+  'doechii':'The Fool','ice spice':'The Fool','sophie':'The Fool',
+  'arca':'The Fool','yeat':'The Fool','bladee':'The Fool',
+  'playboi carti':'The Fool','slayyyter':'The Fool','kim petras':'The Fool',
+  'rico nasty':'The Fool','doja cat':'The Fool','ecco2k':'The Fool',
+  'oklou':'The Fool','caroline polachek':'The Empress',
+  'yeule':'The Moon','weirdcore':'The Fool',
+  'eartheater':'The Fool','shygirl':'The Fool',
+  'oklou':'The Fool','gfoty':'The Fool',
+  'jane remover':'The Fool','model/actriz':'The Fool',
+  'object blue':'The Fool','arca':'The Fool',
+  'machine girl':'The Chariot','health':'The Tower',
+  'clipping.':'The Tower','death grips':'The Tower',
+
+  // ── The Devil ── dark, obsessive
+  'nick cave':'The Devil','nick cave & the bad seeds':'The Devil',
+  'tom waits':'The Devil','the cure':'The Devil','bauhaus':'The Devil',
+  'siouxsie and the banshees':'The Devil','the sisters of mercy':'The Devil',
+  'swans':'The Devil','pj harvey':'The Devil','chelsea wolfe':'The Devil',
+  'interpol':'The Devil','crystal castles':'The Devil','depeche mode':'The Devil',
+  'nine inch nails':'The Devil','white lies':'The Devil','the horrors':'The Devil',
+  'the birthday party':'The Devil','current 93':'The Devil',
+  'father john misty':'The Devil','the doors':'The Devil',
+  'iggy pop':'The Devil','lou reed':'The Devil','velvet underground':'The Devil',
+  'the velvet underground':'The Devil','nico':'The Moon',
+  'scott walker':'The Devil','coil':'The Hanged Man',
+  'throbbing gristle':'The Hanged Man','einstürzende neubauten':'The Devil',
+  'einsturzende neubauten':'The Devil','type o negative':'The Devil',
+
+  // ── The Tower ── metal, hardcore, intense
+  'metallica':'The Tower','black sabbath':'The Tower','slayer':'The Tower',
+  'pantera':'The Tower','tool':'The Tower','system of a down':'The Tower',
+  'slipknot':'The Tower','iron maiden':'The Tower','judas priest':'The Tower',
+  'converge':'The Tower','neurosis':'The Tower','meshuggah':'The Tower',
+  'mastodon':'The Tower','death grips':'The Tower','daughters':'The Tower',
+  'full of hell':'The Tower','code orange':'The Tower',
+  'alanis morissette':'The Tower','hole':'The Tower',
+  'nirvana':'The Tower','soundgarden':'The Tower',
+  'alice in chains':'The Tower','pearl jam':'The Tower',
+  'rage against the machine':'Justice','screaming females':'The Tower',
+  'sleater-kinney':'The Chariot','bikini kill':'The Chariot',
+  'les claypool':'The Devil','primus':'The Devil',
+  'faith no more':'The Tower','mr. bungle':'The Fool',
+  'the jesus and mary chain':'The Moon','my bloody valentine':'The Moon',
+  'sonic youth':'The Tower','dinosaur jr.':'The Tower',
+  'hüsker dü':'The Tower','husker du':'The Tower',
+
+  // ── The Chariot ── fast, momentum, disciplined speed
+  'the prodigy':'The Chariot','the clash':'The Chariot','ramones':'The Chariot',
+  'green day':'The Chariot','blink-182':'The Chariot','sum 41':'The Chariot',
+  'chemical brothers':'The Chariot','aphex twin':'The Chariot',
+  'gesaffelstein':'The Chariot','pendulum':'The Chariot',
+  'bad religion':'The Chariot','fugazi':'The Chariot','minor threat':'The Chariot',
+  'talking heads':'The Chariot','new order':'The Chariot',
+  'wire':'The Chariot','television':'The Chariot','gang of four':'The Chariot',
+  'lcd soundsystem':'The World','the rapture':'The World',
+  'justice':'The Chariot','daft punk':'The World',
+  'kavinsky':'The Chariot','perturbator':'The Chariot',
+  'carpenter brut':'The Chariot','com truise':'The Hanged Man',
+  'the soft moon':'The Moon','survive':'The Moon',
+  'health':'The Tower','neon indian':'The Star',
+  'washed out':'The Star','small black':'The Star',
+
+  // ── Justice ── protest, moral weight
+  'nina simone':'Justice','fela kuti':'Justice',
+  'joan baez':'Justice','gil scott-heron':'Justice',
+  'billy bragg':'Justice','ani difranco':'Justice',
+  'miriam makeba':'Justice','woody guthrie':'Justice','pete seeger':'Justice',
+  'phil ochs':'Justice','tom robinson':'Justice',
+  'the specials':'Justice','the clash':'The Chariot',
+  'toots and the maytals':'Justice','burning spear':'Justice',
+  'bunny wailer':'Justice','peter tosh':'Justice',
+  'bob marley':'Justice','damian marley':'Justice',
+  'lauryn hill':'The Magician','ms. lauryn hill':'The Magician',
+  'black star':'Justice','mos def':'Justice','talib kweli':'Justice',
+  'common':'Justice','the roots':'Justice','dead prez':'Justice',
+  'lowkey':'Justice','k-rino':'Justice',
+
+  // ── Judgement ── anthemic, collective catharsis
+  'arcade fire':'Judgement','sigur rós':'Judgement','sigur ros':'Judgement',
+  'godspeed you! black emperor':'Judgement','explosions in the sky':'Judgement',
+  'u2':'Judgement','coldplay':'Judgement','the killers':'Judgement',
+  'imagine dragons':'Judgement','twenty one pilots':'Judgement',
+  'panic! at the disco':'Judgement','my chemical romance':'Judgement',
+  'fall out boy':'Judgement','paramore':'Judgement','foo fighters':'Judgement',
+  'the war on drugs':'Judgement','the smashing pumpkins':'Judgement',
+  'oasis':'Judgement','the verve':'Judgement','miley cyrus':'Judgement',
+  'elbow':'Judgement','keane':'Judgement','snow patrol':'Judgement',
+  'travis':'Judgement','biffy clyro':'Judgement',
+  'muse':'Judgement','radiohead':'The Moon',
+  'sigur ros':'Judgement','explosions in the sky':'Judgement',
+  'mogwai':'Judgement','slint':'The Moon',
+  'godspeed you black emperor':'Judgement','silver mt. zion':'Judgement',
+  'ef':'Judgement','caspian':'Judgement',
+
+  // ── The Hierophant ── devotional, sacred
+  'johnny cash':'The Hierophant','mahalia jackson':'The Hierophant',
+  'aretha franklin':'The Hierophant','sam cooke':'The Hierophant',
+  'the staple singers':'The Hierophant','kirk franklin':'The Hierophant',
+  'tammy wynette':'The Hierophant','hank williams':'The Hierophant',
+  'patsy cline':'The Hierophant',
+};
+
+// ─── WORKAROUND 3: RELATED ARTISTS FALLBACK ──────────────
+// For top artists not in the lookup, fetch their related artists
+// and check those against the table. Only runs for top 5 unlisted artists
+// to keep API calls manageable.
+async function inferCardFromRelated(artist, token) {
+  try {
+    const res = await fetch(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`, {
+      headers: { Authorization: 'Bearer ' + token }
+    });
+    const data = await res.json();
+    const related = data.artists || [];
+    const scores = {};
+    for (const rel of related.slice(0, 10)) {
+      const card = ARTIST_CARDS[rel.name.toLowerCase()] || cardFromName(rel.name);
+      if (card) scores[card] = (scores[card] || 0) + 1;
+    }
+    const top = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    return top.length > 0 ? top[0][0] : null;
+  } catch {
+    return null;
+  }
+}
+
+// ─── SCORING ─────────────────────────────────────────────
+// WORKAROUND 4: Weight cap — any single artist contributes at most 5 points,
+// so one famous listed artist can't dominate 15 unlisted ones.
+const MAX_ARTIST_WEIGHT = 5;
+
+async function scoreArtists(items, token) {
+  const scores = {};
+  let unlisted = [];
+
+  for (let i = 0; i < items.length; i++) {
+    const artist = items[i];
+    const weight = Math.min(MAX_ARTIST_WEIGHT, Math.max(1, items.length - i));
+    const name   = artist.name.toLowerCase();
+
+    // Try direct lookup first, then name pattern
+    const card = ARTIST_CARDS[name] || cardFromName(artist.name);
+    if (card) {
+      scores[card] = (scores[card] || 0) + weight;
+    } else {
+      // Collect unlisted artists for related-artist inference (top 5 only)
+      if (unlisted.length < 5) unlisted.push({ artist, weight });
+    }
+  }
+
+  // Related artist inference for unlisted top artists
+  if (token) {
+    await Promise.all(unlisted.map(async ({ artist, weight }) => {
+      const card = await inferCardFromRelated(artist, token);
+      if (card) scores[card] = (scores[card] || 0) + weight * 0.5; // half weight for inferred
+    }));
+  }
+
   return scores;
 }
 
@@ -271,63 +583,47 @@ function topCard(scores) {
 }
 
 // ─── READINGS ────────────────────────────────────────────
-const a2str  = n => n.longArtist2  ? ` and ${n.longArtist2}`  : '';
+const a2str = n => n.longArtist2 ? ` and ${n.longArtist2}` : '';
 
 const READINGS = {
   'The Fool': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always had a chaotic streak. The Fool doesn't pick a lane. More accurately: The Fool doesn't believe lanes exist.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} gave way to ${n.arrivedName} and the logic isn't obvious to anyone but you. The Fool moves by instinct. The pivot makes sense from the inside.`
-      : `${n.shortArtist1} is in your current rotation, and The Fool approves. Right now you're reaching for something nobody has fully named yet.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} gave way to ${n.arrivedName} and the logic isn't obvious to anyone but you. The Fool moves by instinct. The pivot makes sense from the inside.` : `${n.shortArtist1} is in your current rotation, and The Fool approves. Right now you're reaching for something nobody has fully named yet.`,
     future:  n => `Your taste is becoming less explainable, not more. The Fool says: correct. Something chaotic and entirely your own is still forming.`,
   },
   'The Magician': {
-    past:    n => `${n.longArtist1}${a2str(n)} — music where language is the primary instrument, where the lyric lands like something you needed to hear said plainly. The Magician rules words as power. Your history confirms it.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} receded; ${n.arrivedName} arrived with something specific to say. The Magician doesn't stay where the conversation has gone quiet.`
-      : `${n.shortArtist1} keeps playing. The Magician is the card of will and articulation — right now you're drawn to music that says exactly what it means.`,
+    past:    n => `${n.longArtist1}${a2str(n)} — music where language is the primary instrument, where the lyric lands like something you needed to hear said plainly. The Magician rules words as power.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} receded; ${n.arrivedName} arrived with something specific to say. The Magician doesn't stay where the conversation has gone quiet.` : `${n.shortArtist1} keeps playing. Right now you're drawn to music that says exactly what it means.`,
     future:  n => `Your taste is moving toward the direct and intentional. What's coming requires precision. Your ears are already practicing.`,
   },
   'The High Priestess': {
     past:    n => `${n.longArtist1}${a2str(n)} — music that lives below language, felt before it is understood. This has been your home for years. The High Priestess does not explain herself, and neither have you.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} has receded; ${n.arrivedName} has arrived quieter, more interior. The High Priestess governs the music you put on when you need to think without interruption.`
-      : `${n.shortArtist1} keeps playing, and you don't need to explain it to anyone. You are processing something you haven't named yet.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} has receded; ${n.arrivedName} has arrived quieter, more interior. The High Priestess governs the music you put on when you need to think without interruption.` : `${n.shortArtist1} keeps playing, and you don't need to explain it to anyone. You are processing something you haven't named yet.`,
     future:  n => `The direction is inward. What's coming is quieter, more interior, less concerned with being understood. The High Priestess does not perform — she knows. Your taste is moving the same way.`,
   },
   'The Empress': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste gravitates toward the lush, the theatrical, the deliberately grand. The Empress doesn't do restraint. Neither have you.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} has receded; ${n.arrivedName} has arrived with more drama, more texture. The Empress always finds her way to the most sumptuous thing in the room.`
-      : `${n.shortArtist1} is where you are right now — maximalist, sensory, larger than life. The Empress rules abundance. Your current listening is in full bloom.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} has receded; ${n.arrivedName} has arrived with more drama, more texture. The Empress always finds her way to the most sumptuous thing in the room.` : `${n.shortArtist1} is where you are right now — maximalist, sensory, larger than life. The Empress rules abundance. Your current listening is in full bloom.`,
     future:  n => `More grandeur, more sensation — that's the direction. The Empress does not arrive subtly. Neither will what's coming.`,
   },
   'The Emperor': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always had architecture to it. Grand structures, deliberate power, music that occupies a room before anyone speaks. The Emperor builds to last.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} has given way to ${n.arrivedName} — the scale hasn't changed, only the form. The Emperor rebuilds but never shrinks.`
-      : `${n.shortArtist1} is where you are — music of scale and authority. The Emperor doesn't ask for attention. He occupies space until attention arrives on its own.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} has given way to ${n.arrivedName} — the scale hasn't changed, only the form. The Emperor rebuilds but never shrinks.` : `${n.shortArtist1} is where you are — music of scale and authority. The Emperor doesn't ask for attention. He occupies space until attention arrives on its own.`,
     future:  n => `Something large is forming. The Emperor suggests the next chapter has weight to it — music that means something beyond the moment it's played.`,
   },
   'The Hierophant': {
-    past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has a devotional quality. Music as ritual, as practice, as something returned to again and again for more than pleasure. The Hierophant keeps the tradition.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.arrivedName} has entered where ${n.departedName} used to be. The ritual continues with a new scripture. The Hierophant adapts the form; he never abandons the practice.`
-      : `${n.shortArtist1} keeps playing — music you return to like a practice. The Hierophant governs music that feels like it belongs to something larger than a single listen.`,
+    past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has a devotional quality. Music as ritual, as practice, returned to again and again for more than pleasure. The Hierophant keeps the tradition.`,
+    present: n => n.arrivedName && n.departedName ? `${n.arrivedName} has entered where ${n.departedName} used to be. The ritual continues with a new scripture. The Hierophant adapts the form; he never abandons the practice.` : `${n.shortArtist1} keeps playing — music you return to like a practice, something larger than a single listen.`,
     future:  n => `The Hierophant suggests continuity. What's coming is not reinvention — it's deepening. You are moving further into something, not away from it.`,
   },
   'The Lovers': {
     past:    n => `${n.longArtist1}${a2str(n)} — music that makes you feel understood, that sounds like it was made for you specifically. The Lovers is not just romance. It is resonance. You've always known the difference.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.arrivedName} is new and already essential — something in the intimacy of it, the way it sounds like a conversation. ${n.departedName} served its season.`
-      : `${n.shortArtist1} keeps coming up. Your current listening is warm, intimate, emotionally available. The Lovers suggests a season of resonance — music that meets you exactly where you are.`,
+    present: n => n.arrivedName && n.departedName ? `${n.arrivedName} is new and already essential — something in the intimacy of it, the way it sounds like a conversation. ${n.departedName} served its season.` : `${n.shortArtist1} keeps coming up. Your current listening is warm, intimate, emotionally available. The Lovers suggests a season of resonance.`,
     future:  n => `More warmth, more openness — that's where this is going. The Lovers asks you to stop armoring and start receiving. Your playlist is already there.`,
   },
   'The Chariot': {
     past:    n => `${n.longArtist1}${a2str(n)} at full speed — your history reads like someone who has always moved with intention. The Chariot is not impulsive. It is disciplined momentum. You don't drift.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.arrivedName} entered fast and hasn't let up. ${n.departedName} is in the rearview. The Chariot keeps moving — it doesn't slow down to look back.`
-      : `${n.shortArtist1} is doing what The Chariot demands: forward motion, no hesitation. You know what you want and you're not slowing down to second-guess it.`,
+    present: n => n.arrivedName && n.departedName ? `${n.arrivedName} entered fast and hasn't let up. ${n.departedName} is in the rearview. The Chariot keeps moving — it doesn't slow down to look back.` : `${n.shortArtist1} is doing what The Chariot demands: forward motion, no hesitation. You know what you want and you're not slowing down to second-guess it.`,
     future:  n => `The momentum is building. The Chariot doesn't promise easy — it promises direction. What's coming requires commitment. Your recent listening has already decided.`,
   },
   'Strength': {
@@ -337,134 +633,98 @@ const READINGS = {
   },
   'The Hermit': {
     past:    n => `${n.longArtist1}${a2str(n)} and the patience to listen all the way through — that's the thread in your history. The Hermit is not lonely. The Hermit is deliberate.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} has faded; ${n.arrivedName} plays now — quieter, more demanding of attention. The Hermit moves inward by choice.`
-      : `${n.shortArtist1} plays and you don't need company. The Hermit carries a lantern not to show others the way, but to see their own path clearly. That's what you're doing.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} has faded; ${n.arrivedName} plays now — quieter, more demanding of attention. The Hermit moves inward by choice.` : `${n.shortArtist1} plays and you don't need company. The Hermit carries a lantern not to show others the way, but to see their own path clearly.`,
     future:  n => `Your listening is getting quieter, more stripped back. The Hermit suggests a season of intentional focus ahead — the particular clarity that comes from choosing less noise.`,
   },
   'Wheel of Fortune': {
-    past:    n => `${n.longArtist1}${a2str(n)} and a dozen other things that share nothing obvious — your all-time taste refuses to be categorized. The Wheel rules eclecticism. You have always trusted your own orbit over anyone else's.`,
+    past:    n => `${n.longArtist1}${a2str(n)} and a dozen other things that share nothing obvious — your all-time taste refuses to be categorized. The Wheel rules eclecticism. You have always trusted your own orbit.`,
     present: n => `Your recent listening is varied, restless, reaching in several directions at once. The Wheel is mid-turn. Right now you are between fixed points. That's exactly right.`,
-    future:  n => `The Wheel keeps turning. Your taste is diversifying in ways that don't resolve into a single direction yet. Something unexpected is coming, and your ears are already preparing without telling your brain.`,
+    future:  n => `The Wheel keeps turning. Your taste is diversifying in ways that don't resolve into a single direction yet. Something unexpected is coming, and your ears are already preparing.`,
   },
   'Justice': {
-    past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always had a moral dimension. Music that names things, that refuses to look away. The Lovers resonates; Justice insists.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} has faded; ${n.arrivedName} has arrived with something to say. Justice doesn't stay where the conversation has gone quiet.`
-      : `${n.shortArtist1} keeps playing. Justice is the card of truth-telling — right now you're drawn to music that says the thing plainly. That's conviction, not comfort.`,
+    past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always had a moral dimension. Music that names things, that refuses to look away. Justice insists.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} has faded; ${n.arrivedName} has arrived with something to say. Justice doesn't stay where the conversation has gone quiet.` : `${n.shortArtist1} keeps playing. Justice is the card of truth-telling — right now you're drawn to music that says the thing plainly. That's conviction, not comfort.`,
     future:  n => `The direction is toward music that means something beyond the sound. Justice suggests conviction — in what you listen to, and probably other things too.`,
   },
   'The Hanged Man': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always included music that suspends time rather than marks it. The Hanged Man governs deliberate stillness. You have always known how to wait inside a sound.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} gave way to ${n.arrivedName} — even quieter, even more suspended. The Hanged Man descends further.`
-      : `${n.shortArtist1} plays and time does something different. Suspension is an active choice. Right now you are choosing stillness. That is harder than it looks.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} gave way to ${n.arrivedName} — even quieter, even more suspended. The Hanged Man descends further.` : `${n.shortArtist1} plays and time does something different. Suspension is an active choice. Right now you are choosing stillness. That is harder than it looks.`,
     future:  n => `The direction is more suspension, less event. The Hanged Man says: what you're looking for cannot be found by moving faster.`,
   },
   'Death': {
     past:    n => `${n.longArtist1} and that entire world — built up across years of listening.`,
-    present: n => `${n.shortArtist1} is here now, where ${n.longArtist1} used to be, and the overlap between them is almost nothing. Death in tarot is never an ending. It is the most complete transformation available. The cards do not often see a shift this total. Something fundamental changed. The music knows it even if you don't yet.`,
+    present: n => `${n.shortArtist1} is here now, where ${n.longArtist1} used to be, and the overlap between them is almost nothing. Death in tarot is never an ending. It is the most complete transformation available. Something fundamental changed. The music knows it even if you don't yet.`,
     future:  n => `What's coming is not a refinement of what came before — it is a continuation of the transformation already underway. Death does not reverse. It moves through.`,
   },
   'Temperance': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste blends rather than polarizes. Not maximally dark, not maximally bright, never fully one thing. Temperance is the art of balance, practiced without needing to name it.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} has given way to ${n.arrivedName} — the balance shifts, but it remains balance. Temperance adapts the mixture; it never abandons the principle.`
-      : `${n.shortArtist1} is where you are — music that synthesizes rather than declares. Temperance is the middle path, chosen not from indecision but from wisdom.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} has given way to ${n.arrivedName} — the balance shifts, but it remains balance. Temperance adapts the mixture; it never abandons the principle.` : `${n.shortArtist1} is where you are — music that synthesizes rather than declares. Temperance is the middle path, chosen not from indecision but from wisdom.`,
     future:  n => `The direction is toward integration. Temperance suggests the next chapter involves bringing things together rather than choosing between them.`,
   },
   'The Devil': {
     past:    n => `${n.longArtist1}${a2str(n)} — strange, relentless, a little dangerous. Your all-time taste goes places most people won't follow. The Devil rules obsession. You are loyal to your vices in exactly the right way.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.arrivedName} showed up recently and you haven't been able to stop. ${n.departedName} couldn't hold you the same way anymore. The Devil names the new obsession.`
-      : `${n.shortArtist1} is on heavy rotation and you know it. Attached in a way that goes beyond taste. That's not a problem. That's devotion.`,
+    present: n => n.arrivedName && n.departedName ? `${n.arrivedName} showed up recently and you haven't been able to stop. ${n.departedName} couldn't hold you the same way anymore. The Devil names the new obsession.` : `${n.shortArtist1} is on heavy rotation and you know it. Attached in a way that goes beyond taste. That's not a problem. That's devotion.`,
     future:  n => `Something magnetic is forming — a sound, a phase, an obsession still taking shape. You won't be able to explain it to anyone. That's fine.`,
   },
   'The Tower': {
     past:    n => `${n.longArtist1}${a2str(n)} — uncompromising, high voltage, built to shake something loose. The Tower does not play in the background. It announces itself. So have you.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} gave way to ${n.arrivedName}. The intensity hasn't left — it's wearing a different face now. The Tower is still falling. You just changed which building.`
-      : `${n.shortArtist1} is where you are right now — intensity without apology, energy without explanation. The Tower is not comfortable music. It is honest music.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} gave way to ${n.arrivedName}. The intensity hasn't left — it's wearing a different face now. The Tower is still falling. You just changed which building.` : `${n.shortArtist1} is where you are right now — intensity without apology, energy without explanation. The Tower is not comfortable music. It is honest music.`,
     future:  n => `Something is accelerating. The Tower falls not as punishment but as permission — to stop holding together what was never meant to last.`,
   },
   'The Star': {
     past:    n => `${n.longArtist1}${a2str(n)} — quiet and luminous, music that makes the future feel possible without rushing you toward it. The Star has been a constant for a long time.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} is gone from the foreground; ${n.arrivedName} has taken its place — something more open, more reaching. The Star rises after a clearing. You may be in it.`
-      : `${n.shortArtist1} keeps appearing — open, reaching, a little hopeful. The Star rises after something has cleared. You may be in that clearing right now.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} is gone from the foreground; ${n.arrivedName} has taken its place — something more open, more reaching. The Star rises after a clearing. You may be in it.` : `${n.shortArtist1} keeps appearing — open, reaching, a little hopeful. The Star rises after something has cleared. You may be in that clearing right now.`,
     future:  n => `Something is gentling. The Star promises not triumph but renewal — the kind that comes quietly, after something has cleared, and stays longer than you expect.`,
   },
   'The Moon': {
     past:    n => `${n.longArtist1}${a2str(n)} — music that understands the 2am version of you. The Moon rules things felt before they are named. You have always lived in that territory.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.arrivedName} has moved in where ${n.departedName} used to live. Something shifted toward the interior. The Moon doesn't ask you to explain it — only to keep going.`
-      : `${n.shortArtist1} keeps surfacing — weighted, introspective, a little unresolved. The Moon doesn't offer answers. It illuminates just enough to keep walking.`,
+    present: n => n.arrivedName && n.departedName ? `${n.arrivedName} has moved in where ${n.departedName} used to live. Something shifted toward the interior. The Moon doesn't ask you to explain it — only to keep going.` : `${n.shortArtist1} keeps surfacing — weighted, introspective, a little unresolved. The Moon doesn't offer answers. It illuminates just enough to keep walking.`,
     future:  n => `Something is getting quieter, more interior. The Moon says: this is not regression. This is depth. What looks like sadness from the outside is often just honesty from within.`,
   },
   'The Sun': {
     past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste leans bright, energetic, unguarded. The Sun doesn't apologize for warmth. Neither have you. Joy has always been a first language.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.arrivedName} is new and already feels essential — brighter energy, less ambivalence. Something lifted. ${n.departedName} was part of a heavier chapter.`
-      : `${n.shortArtist1} is your current obsession, and The Sun says: correct. High energy, high warmth, no ambivalence. This is a true north revealing itself.`,
+    present: n => n.arrivedName && n.departedName ? `${n.arrivedName} is new and already feels essential — brighter energy, less ambivalence. Something lifted. ${n.departedName} was part of a heavier chapter.` : `${n.shortArtist1} is your current obsession, and The Sun says: correct. High energy, high warmth, no ambivalence. This is a true north revealing itself.`,
     future:  n => `More warmth is coming. The Sun does not demand you earn it — it just rises. Your listening suggests you are finally letting it. What's ahead is lighter than what came before.`,
   },
   'Judgement': {
-    past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always reached for the anthemic, the collective, music made for more than one person in a room. Judgement is the card of reckoning and awakening. Your history has always pointed there.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} has given way to ${n.arrivedName} — bigger, more reaching, built for catharsis. Judgement always escalates.`
-      : `${n.shortArtist1} keeps playing — big, reaching, built for collective release. Judgement is not subtle. Right now you want the music that opens something up.`,
-    future:  n => `Something loud and clarifying is coming. Judgement suggests a reckoning — not destructive but illuminating. The kind of music that makes you feel part of something. You're heading toward it.`,
+    past:    n => `${n.longArtist1}${a2str(n)} — your all-time taste has always reached for the anthemic, the collective, music made for more than one person in a room. Judgement is the card of reckoning and awakening.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} has given way to ${n.arrivedName} — bigger, more reaching, built for catharsis. Judgement always escalates.` : `${n.shortArtist1} keeps playing — big, reaching, built for collective release. Judgement is not subtle. Right now you want the music that opens something up.`,
+    future:  n => `Something loud and clarifying is coming. Judgement suggests a reckoning — not destructive but illuminating. The kind of music that makes you feel part of something.`,
   },
   'The World': {
     past:    n => `${n.longArtist1}${a2str(n)} on full volume, body in motion — this has always been you at your best. The World is presence and completion. Your all-time taste confirms you know how to inhabit a moment.`,
-    present: n => n.arrivedName && n.departedName
-      ? `${n.departedName} was a different season; ${n.arrivedName} is here now and The World approves. You are exactly where you should be. Don't overthink it.`
-      : `${n.shortArtist1} is in your current rotation and The World says you are exactly where you should be. Rare. Don't overthink it.`,
+    present: n => n.arrivedName && n.departedName ? `${n.departedName} was a different season; ${n.arrivedName} is here now and The World approves. You are exactly where you should be. Don't overthink it.` : `${n.shortArtist1} is in your current rotation and The World says you are exactly where you should be. Rare. Don't overthink it.`,
     future:  n => `More arrival, less preparing. The World says the next chapter is one where you stop rehearsing and start inhabiting. Your recent listening is already there. The rest of you is catching up.`,
   },
 };
 
 // ─── NARRATIVE ───────────────────────────────────────────
-function buildNarrative({ longArtists, shortArtists }) {
+async function buildNarrative({ longArtists, shortArtists }, token) {
   const longItems  = longArtists.items  || [];
   const shortItems = shortArtists.items || [];
-
-  function weightedGenres(items) {
-    const out = [];
-    items.forEach((a, i) => {
-      const w = Math.max(1, items.length - i);
-      for (let j = 0; j < w; j++) out.push(...(a.genres || []));
-    });
-    return out;
-  }
-
-  const longGenres  = weightedGenres(longItems);
-  const shortGenres = weightedGenres(shortItems);
 
   const longNames  = new Set(longItems.map(a => a.name));
   const shortNames = new Set(shortItems.map(a => a.name));
   const departed   = longItems.filter(a => !shortNames.has(a.name));
   const arrived    = shortItems.filter(a => !longNames.has(a.name));
 
-  const longGenreSet  = new Set(longGenres.map(g => g.toLowerCase()));
-  const shortGenreSet = new Set(shortGenres.map(g => g.toLowerCase()));
-  const newGenres     = [...shortGenreSet].filter(g => !longGenreSet.has(g));
-
   const overlapCount = shortItems.filter(a => longNames.has(a.name)).length;
   const stability    = shortItems.length > 0 ? overlapCount / shortItems.length : 1;
 
-  const longScores  = scoreGenres(longGenres);
-  const shortScores = scoreGenres(shortGenres.length ? shortGenres : longGenres);
+  // Score both time ranges using the multi-strategy scorer
+  const [longScores, shortScores] = await Promise.all([
+    scoreArtists(longItems, token),
+    scoreArtists(shortItems.length ? shortItems : longItems, token),
+  ]);
 
   const pastCard    = topCard(longScores);
   const presentCard = topCard(shortScores);
 
   let futureCard;
-  if (stability < 0.2 && arrived.length >= 3)   futureCard = 'Death';
-  else if (stability > 0.7)                      futureCard = 'Strength';
-  else if (newGenres.length > 3)                 futureCard = topCard(scoreGenres(newGenres)) || 'Wheel of Fortune';
-  else if (presentCard !== pastCard)             futureCard = presentCard;
-  else                                           futureCard = 'Wheel of Fortune';
+  if      (stability < 0.2 && arrived.length >= 3)  futureCard = 'Death';
+  else if (stability > 0.7)                          futureCard = 'Strength';
+  else if (presentCard !== pastCard)                 futureCard = presentCard;
+  else                                               futureCard = 'Wheel of Fortune';
 
   return {
     pastCard, presentCard, futureCard,
@@ -480,41 +740,26 @@ function buildNarrative({ longArtists, shortArtists }) {
 // ─── PKCE ────────────────────────────────────────────────
 function randomString(len) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  return Array.from(crypto.getRandomValues(new Uint8Array(len)))
-    .map(b => chars[b % chars.length]).join('');
+  return Array.from(crypto.getRandomValues(new Uint8Array(len))).map(b => chars[b % chars.length]).join('');
 }
 async function makeChallenge(verifier) {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
-  return btoa(String.fromCharCode(...new Uint8Array(digest)))
-    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+  return btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
 }
 async function login() {
-  const verifier  = randomString(64);
+  const verifier = randomString(64);
   const challenge = await makeChallenge(verifier);
   sessionStorage.setItem('pkce_verifier', verifier);
-  window.location.href = 'https://accounts.spotify.com/authorize?' + new URLSearchParams({
-    client_id: CLIENT_ID, response_type: 'code', redirect_uri: REDIRECT_URI,
-    scope: 'user-top-read', code_challenge_method: 'S256', code_challenge: challenge,
-  });
+  window.location.href = 'https://accounts.spotify.com/authorize?' + new URLSearchParams({ client_id: CLIENT_ID, response_type: 'code', redirect_uri: REDIRECT_URI, scope: 'user-top-read', code_challenge_method: 'S256', code_challenge: challenge });
 }
 async function exchangeToken(code) {
-  const res = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      client_id: CLIENT_ID, grant_type: 'authorization_code',
-      code, redirect_uri: REDIRECT_URI,
-      code_verifier: sessionStorage.getItem('pkce_verifier'),
-    }),
-  });
+  const res = await fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ client_id: CLIENT_ID, grant_type: 'authorization_code', code, redirect_uri: REDIRECT_URI, code_verifier: sessionStorage.getItem('pkce_verifier') }) });
   return res.json();
 }
 
 // ─── SPOTIFY ─────────────────────────────────────────────
 async function spotifyGet(path, token) {
-  const res = await fetch('https://api.spotify.com/v1' + path, {
-    headers: { Authorization: 'Bearer ' + token },
-  });
+  const res = await fetch('https://api.spotify.com/v1' + path, { headers: { Authorization: 'Bearer ' + token } });
   return res.json();
 }
 async function fetchMusicData(token) {
@@ -527,7 +772,6 @@ async function fetchMusicData(token) {
 
 // ─── FLIP ────────────────────────────────────────────────
 function flipCard(el) {
-  // Don't flip during the initial reveal animation
   if (!el.classList.contains('revealed')) return;
   el.querySelector('.card-inner').classList.toggle('flipped');
 }
@@ -536,78 +780,29 @@ function flipCard(el) {
 const app = document.getElementById('app');
 
 function renderLanding() {
-  app.innerHTML = `
-    <div class="landing">
-      <span class="moon">☽</span>
-      <h1>Music Tarot</h1>
-      <div class="ornament">
-        <div class="ornament-line"></div><span class="ornament-dot">✦</span><div class="ornament-line"></div>
-      </div>
-      <p>The cards do not lie.<br>Neither does your Spotify history.</p>
-      <button class="btn-connect" onclick="login()">Connect Spotify</button>
-    </div>`;
+  app.innerHTML = `<div class="landing"><span class="moon">☽</span><h1>Music Tarot</h1><div class="ornament"><div class="ornament-line"></div><span class="ornament-dot">✦</span><div class="ornament-line"></div></div><p>The cards do not lie.<br>Neither does your Spotify history.</p><button class="btn-connect" onclick="login()">Connect Spotify</button></div>`;
 }
-
 function renderLoading() {
-  app.innerHTML = `
-    <div class="loading">
-      <span class="spinner">✦</span>
-      <p>Consulting the cards&hellip;</p>
-    </div>`;
+  app.innerHTML = `<div class="loading"><span class="spinner">✦</span><p>Consulting the cards&hellip;</p></div>`;
 }
-
 function renderReading(n) {
   const cards = [
-    { position: 'The Past',    card: n.pastCard,    reading: READINGS[n.pastCard]?.past(n)    || '' },
+    { position: 'The Past',    card: n.pastCard,    reading: READINGS[n.pastCard]?.past(n)       || '' },
     { position: 'The Present', card: n.presentCard, reading: READINGS[n.presentCard]?.present(n) || '' },
-    { position: 'The Future',  card: n.futureCard,  reading: READINGS[n.futureCard]?.future(n)  || '' },
+    { position: 'The Future',  card: n.futureCard,  reading: READINGS[n.futureCard]?.future(n)   || '' },
   ];
-
   const cardsHtml = cards.map((card, i) => {
     const arc = ARCANA[card.card] || { num: '?', sym: '✦', file: null };
-
-    // Back face: show image if file number exists, otherwise placeholder
     const backHtml = arc.file !== null
       ? `<img src="${arc.file}.jpg" alt="${card.card}" />`
       : `<div class="card-back-placeholder"><span>${arc.sym}</span><p>illustration coming soon</p></div>`;
-
-    return `
-      <div class="tarot-card" id="card-${i}" onclick="flipCard(this)">
-        <div class="card-inner">
-          <div class="card-front">
-            <div class="card-position">${card.position}</div>
-            <div class="card-numeral">${arc.num}</div>
-            <span class="card-symbol">${arc.sym}</span>
-            <div class="card-name">${card.card}</div>
-            <div class="card-rule"></div>
-            <p class="card-reading">${card.reading}</p>
-          </div>
-          <div class="card-back">${backHtml}</div>
-        </div>
-      </div>`;
+    return `<div class="tarot-card" id="card-${i}" onclick="flipCard(this)"><div class="card-inner"><div class="card-front"><div class="card-position">${card.position}</div><div class="card-numeral">${arc.num}</div><span class="card-symbol">${arc.sym}</span><div class="card-name">${card.card}</div><div class="card-rule"></div><p class="card-reading">${card.reading}</p></div><div class="card-back">${backHtml}</div></div></div>`;
   }).join('');
-
-  app.innerHTML = `
-    <div class="reading">
-      <div class="reading-header">
-        <h2>Your Reading</h2>
-        <p>Three cards drawn from the archive of your soul</p>
-      </div>
-      <div class="cards-grid">${cardsHtml}</div>
-      <p class="flip-hint">✦ &nbsp; click any card to reveal its illustration &nbsp; ✦</p>
-    </div>`;
-
-  cards.forEach((_, i) => {
-    setTimeout(() => document.getElementById('card-' + i)?.classList.add('revealed'), 200 + i * 450);
-  });
+  app.innerHTML = `<div class="reading"><div class="reading-header"><h2>Your Reading</h2><p>Three cards drawn from the archive of your soul</p></div><div class="cards-grid">${cardsHtml}</div><p class="flip-hint">✦ &nbsp; click any card to reveal its illustration &nbsp; ✦</p></div>`;
+  cards.forEach((_, i) => setTimeout(() => document.getElementById('card-' + i)?.classList.add('revealed'), 200 + i * 450));
 }
-
 function renderError(msg) {
-  app.innerHTML = `
-    <div class="error-state">
-      <p>✦ &nbsp; ${msg}</p>
-      <button class="restart-btn" onclick="renderLanding()">Try Again</button>
-    </div>`;
+  app.innerHTML = `<div class="error-state"><p>✦ &nbsp; ${msg}</p><button class="restart-btn" onclick="renderLanding()">Try Again</button></div>`;
 }
 
 // ─── INIT ────────────────────────────────────────────────
@@ -615,9 +810,7 @@ async function init() {
   const params = new URLSearchParams(window.location.search);
   const code   = params.get('code');
   const error  = params.get('error');
-
   if (error) { renderLanding(); return; }
-
   if (code) {
     window.history.replaceState({}, '', window.location.pathname);
     renderLoading();
@@ -625,37 +818,14 @@ async function init() {
       const tokenData = await exchangeToken(code);
       if (!tokenData.access_token) throw new Error('Spotify did not return a token — double-check the redirect URI in your Spotify dashboard matches exactly: ' + REDIRECT_URI);
       const musicData = await fetchMusicData(tokenData.access_token);
-      if (!musicData.longArtists.items?.length && !musicData.shortArtists.items?.length) {
-        throw new Error('No artist data returned from Spotify. Make sure you have some listening history and try again.');
-      }
-      const narrative = buildNarrative(musicData);
-
-      // ── TEMPORARY DEBUG — remove once fixed ──────────────
-      const longItems  = musicData.longArtists.items  || [];
-      const shortItems = musicData.shortArtists.items || [];
-      const sampleLongGenres  = longItems.slice(0,5).map(a => `${a.name}: [${(a.genres||[]).join(', ')}]`);
-      const sampleShortGenres = shortItems.slice(0,5).map(a => `${a.name}: [${(a.genres||[]).join(', ')}]`);
-      function wg(items) { const out=[]; items.forEach((a,i)=>{ const w=Math.max(1,items.length-i); for(let j=0;j<w;j++) out.push(...(a.genres||[])); }); return out; }
-      const longScoresDebug  = scoreGenres(wg(longItems));
-      const shortScoresDebug = scoreGenres(wg(shortItems));
-      console.log('=== MUSIC TAROT DEBUG ===');
-      console.log('LONG TERM artists + genres:');
-      sampleLongGenres.forEach(s => console.log(' ', s));
-      console.log('SHORT TERM artists + genres:');
-      sampleShortGenres.forEach(s => console.log(' ', s));
-      console.log('LONG scores:', longScoresDebug);
-      console.log('SHORT scores:', shortScoresDebug);
-      console.log('Cards picked:', narrative.pastCard, '/', narrative.presentCard, '/', narrative.futureCard);
-      console.log('Stability:', narrative.stability?.toFixed(2));
-      // ─────────────────────────────────────────────────────
-
+      if (!musicData.longArtists.items?.length && !musicData.shortArtists.items?.length) throw new Error('No artist data returned from Spotify. Make sure you have some listening history and try again.');
+      const narrative = await buildNarrative(musicData, tokenData.access_token);
       renderReading(narrative);
     } catch(e) {
       renderError(e.message || 'The stars are misaligned. Please try again.');
     }
     return;
   }
-
   renderLanding();
 }
 
