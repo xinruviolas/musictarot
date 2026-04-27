@@ -629,6 +629,26 @@ async function init() {
         throw new Error('No artist data returned from Spotify. Make sure you have some listening history and try again.');
       }
       const narrative = buildNarrative(musicData);
+
+      // ── TEMPORARY DEBUG — remove once fixed ──────────────
+      const longItems  = musicData.longArtists.items  || [];
+      const shortItems = musicData.shortArtists.items || [];
+      const sampleLongGenres  = longItems.slice(0,5).map(a => `${a.name}: [${(a.genres||[]).join(', ')}]`);
+      const sampleShortGenres = shortItems.slice(0,5).map(a => `${a.name}: [${(a.genres||[]).join(', ')}]`);
+      function wg(items) { const out=[]; items.forEach((a,i)=>{ const w=Math.max(1,items.length-i); for(let j=0;j<w;j++) out.push(...(a.genres||[])); }); return out; }
+      const longScoresDebug  = scoreGenres(wg(longItems));
+      const shortScoresDebug = scoreGenres(wg(shortItems));
+      console.log('=== MUSIC TAROT DEBUG ===');
+      console.log('LONG TERM artists + genres:');
+      sampleLongGenres.forEach(s => console.log(' ', s));
+      console.log('SHORT TERM artists + genres:');
+      sampleShortGenres.forEach(s => console.log(' ', s));
+      console.log('LONG scores:', longScoresDebug);
+      console.log('SHORT scores:', shortScoresDebug);
+      console.log('Cards picked:', narrative.pastCard, '/', narrative.presentCard, '/', narrative.futureCard);
+      console.log('Stability:', narrative.stability?.toFixed(2));
+      // ─────────────────────────────────────────────────────
+
       renderReading(narrative);
     } catch(e) {
       renderError(e.message || 'The stars are misaligned. Please try again.');
